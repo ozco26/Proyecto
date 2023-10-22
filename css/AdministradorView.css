@@ -1,0 +1,30 @@
+body{
+    background-color: #E8F9FF;
+    margin: 0px 0;
+}
+
+.cabezera{
+    background-color: #1D5F75;
+    color: #000000;
+    padding: 5px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cabezera__elementos{
+    display: flex;
+    align-items: center;
+}
+
+.Elemento_Titulo{
+    padding-left: 20px;
+}
+
+.btn__desconectar{
+    color: rgb(0, 0, 0)101;
+    padding-right: 20px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
