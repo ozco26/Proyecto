@@ -1,48 +1,70 @@
-document.addEventListener("DOMContentLoaded", function (){
+document.addEventListener("DOMContentLoaded", function () {
+    const tablaactual = document.getElementById("generar__tabla");
 
-    document.getElementById("btn__cliente").addEventListener("click", () => {
-        // Llamar a la función de consulta de usuarios desde el archivo de conexión
-        consultarUsuarios((error, usuarios) => {
-            if (error) {
-                console.error("Error al consultar usuarios:", error);
-            } else {
-                // Datos de usuarios disponibles en "usuarios"
-                console.log("Datos de usuarios:", usuarios);
-    
-                // Crear la tabla HTML
-                const tablaHTML = `
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Cedula</th>
-                                <th>Nombre</th>
-                                <th>Apellido</th>
-                                <th>Fecha de Nacimiento</th>
-                                <th>Correo</th>
-                                <th>Contraseña</th>
-                                <th>ID Rol</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${usuarios.map((usuario) => `
-                                <tr>
-                                    <td>${usuario.cedulaUsuario}</td>
-                                    <td>${usuario.nombre}</td>
-                                    <td>${usuario.apellido}</td>
-                                    <td>${usuario.fechaNacimiento}</td>
-                                    <td>${usuario.correo}</td>
-                                    <td>${usuario.contrasena}</td>
-                                    <td>${usuario.idRol}</td>
-                                </tr>
-                            `).join('')}
-                        </tbody>
-                    </table>
-                `;
-    
-                // Mostrar la tabla en el elemento con id "generar__tabla"
-                document.getElementById("generar__tabla").innerHTML = tablaHTML;
-            }
-        });
-    });
+    const generar = (tipo) => {
+        // Limpia cualquier contenido anterior en la tabla
+        tablaactual.innerHTML = '';
 
+        // Realiza una solicitud a la API para obtener los datos
+        fetch(`https://tu-api.com/${tipo}`)
+            .then(response => response.json())
+            .then(data => {
+                // Crea la estructura de la tabla
+                let tablaHTML = `
+                    <table class="Tabla${tipo}"><thead><tr>`;
+
+                if (tipo === "Cliente") {
+                    tablaHTML += `
+                        <th>Cedula</th>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Fecha Nacimiento</th>
+                        <th>Contraseña</th>
+                        <th>Rol</th>`;
+                }
+                if (tipo === "Chofer") {
+                    tablaHTML += `
+                        <th>Chofer</th>
+                        <th>Email</th>`;
+                }
+                if (tipo === "Ruta") {
+                    tablaHTML += `<th>Ruta</th><th>Email</th>`;
+                }
+
+                tablaHTML += `</tr></thead><tbody>`;
+
+                // Recorre los datos y crea filas en la tabla
+                data.forEach(item => {
+                    tablaHTML += '<tr>';
+                    if (tipo === "Cliente") {
+                        tablaHTML += `<td>${item.Cedula}</td>`;
+                        tablaHTML += `<td>${item.Nombre}</td>`;
+                        tablaHTML += `<td>${item.Apellido}</td>`;
+                        tablaHTML += `<td>${item.FechaNacimiento}</td>`;
+                        tablaHTML += `<td>${item.Contraseña}</td>`;
+                        tablaHTML += `<td>${item.Rol}</td>`;
+                    }
+                    if (tipo === "Chofer") {
+                        tablaHTML += `<td>${item.Chofer}</td>`;
+                        tablaHTML += `<td>${item.Email}</td>`;
+                    }
+                    if (tipo === "Ruta") {
+                        tablaHTML += `<td>${item.Ruta}</td>`;
+                        tablaHTML += `<td>${item.Email}</td>`;
+                    }
+                    tablaHTML += '</tr>';
+                });
+
+                tablaHTML += `</tbody></table>`;
+                tablaactual.innerHTML = tablaHTML;
+            })
+            .catch(error => {
+                console.error("Error al obtener datos de la API:", error);
+            });
+    };
+
+    document.getElementById("btn__cliente").addEventListener("click", () => generar("Cliente"));
+    document.getElementById("btn__chofer").addEventListener("click", () => generar("Chofer"));
+    document.getElementById("btn__ruta").addEventListener("click", () => generar("Ruta"));
 });
+
