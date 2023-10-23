@@ -1,3 +1,8 @@
+
+
+
+
+
 document.addEventListener("DOMContentLoaded", function (){
 
     function popup(){
@@ -6,13 +11,34 @@ document.addEventListener("DOMContentLoaded", function (){
 
     const tablaactual = document.getElementById("generar__tabla");
 
+
     const generar = (tipo) => {
-        let tablaHTML = `<tabla><thead><tr>`;
+
+        tablaactual.innerHTML='';
+
+        let tablaHTML = `<table class="tabla${tipo}"><thead><tr>`;
+
         if (tipo==="Cliente") {
-            tablaHTML += `<th>Cliente</th><th>Email</th>`;
+            tablaHTML += `
+
+            <th>Cedula</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Fecha Nacimiento</th>
+            <th>Contraseña</th>
+            <th>Rol</th>
+            
+            `;
+
+
         }
         if (tipo==="Chofer") {
-            tablaHTML += `<th>Chofer</th><th>Email</th>`;
+            tablaHTML += `
+            
+            <th>Chofer</th>
+            <th>Email</th>
+            
+            `;
         }
         if (tipo==="Ruta") {
             tablaHTML += `<th>Ruta</th><th>Email</th>`;
