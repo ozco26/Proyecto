@@ -5,17 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prueba</title>
     <link rel="stylesheet" type="text/css" href="/css/AdministradorView.css">
-
+    <script src="/javascript/AdministradorView.js"></script>
+    
 </head>
 <body>
     <header class="cabezera">
         <nav class="cabezera__elementos">
             <h1 class="Elemento_Titulo">Pago Electronico - Administrador</h1>
         </nav>
-            <button Id="btn__desconectar" class="btn__desconectar">Cerrar sesion</button>
+            <button Id="btn__desconectar" class="btn">Cerrar sesion</button>
     </header>
     <main>
+        <ul class="btns__en__tabla">
+            <li class="filabtns"><button Id="btn__cliente" class="btn btn__tablas">Cliente</button></li>
+            <li class="filabtns"><button Id="btn__chofer" class="btn btn__tablas">Chofer</button></li>
+            <li class="filabtns"><button Id="btn__ruta" class="btn btn__tablas">Ruta</button></li>
+        </ul>
+
+        <div id="generar__tabla">
+            
+        </div>
+        <button id="btn_generar_informe" class="btn_informe btn__tablas">Generar informe</button>
 
     </main>
+    
 </body>
 </html>

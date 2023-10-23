@@ -1,6 +1,14 @@
+
+
 body{
+    font-family: 'Poppins', sans-serif;
     background-color: #E8F9FF;
     margin: 0px 0;
+}
+
+main{
+    margin-left: 20%;
+    margin-right: 20%;
 }
 
 .cabezera{
@@ -21,10 +29,41 @@ body{
     padding-left: 20px;
 }
 
-.btn__desconectar{
+.btns__en__tabla{
+    list-style: none;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding-inline-start: 0px;
+}
+.filabtns{
+    margin-right: 10px;
+    text-align: center;
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+
+}
+
+.btn{
     color: rgb(0, 0, 0)101;
-    padding-right: 20px;
+    
     background-color: transparent;
+    border: none;
+    cursor: pointer;
+    
+    
+}
+.btn_informe{
+    position: relative;
+    border: none;
+    cursor: pointer;
+}
+
+.btn__tablas{
+    min-width: 150px;
+    padding: 20px 10px;
+    background-color: #1D5F75;
     border: none;
     cursor: pointer;
 }
