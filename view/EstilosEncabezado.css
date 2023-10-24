@@ -1,0 +1,47 @@
+/* Estilo para paginas con encabezado*/
+header {
+    background-color: #1D5F75; /* Color de fondo del encabezado */
+    color: #fff; /* Color del texto en el encabezado */
+    padding: 10px 10PX; /* Espaciado interno en la parte superior e inferior */
+    text-align: center; /* Centrar el contenido en el encabezado */
+    min-height: 40px; /*DA ALTURA CONSTANTE AL ENCABEZADO*/
+}
+
+/* Estilo para el logotipo */
+.logo img {
+    max-width: 150px; /* Limitar el ancho del logotipo */
+    float: left; /* Colocar la imagen a la izquierda */
+    margin-right: 20px; /* Espacio a la derecha de la imagen */
+    margin-top: 20PX;
+}
+
+body {
+    background-image: url("images/background.png"); /* Ruta de la imagen de fondo */
+    background-size: cover; /* Ajustar la imagen al tamaño de la ventana del navegador */
+    background-attachment: fixed; /* Fijar la imagen en su lugar */
+    background-repeat: no-repeat; /* Evitar la repetición de la imagen */
+}
+.contenedor {
+    width: 100px; /* Ancho del contenedor del formulario */
+    margin:  auto; /* Centrar horizontalmente */
+}
+.formulario {
+    width: auto;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    text-align: left; /*Coloca el contenido a la izquierda dentro del contenedor */
+    padding: 20px; /* Espacio interno alrededor del formulario */
+    border: 0px solid; /* Elimina Borde  */
+    background-color: #ccc;
+}
+
+/* Estilo para el formulario y sus elementos */
+form {
+    text-align: center; /* Alinear el texto al centro dentro del formulario */
+}
+
+/* Estilo para los campos y etiquetas del formulario */
+label {
+    display: block; /* Mostrar cada campo en una línea separada */
+}
