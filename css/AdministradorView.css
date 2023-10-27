@@ -1,12 +1,12 @@
 
 
-body{
+.mbody{
     font-family: 'Poppins', sans-serif;
     background-color: #E8F9FF;
     margin: 0px 0;
 }
 
-main{
+.mmain{
     margin-left: 20%;
     margin-right: 20%;
 }
@@ -35,6 +35,8 @@ main{
     justify-content: flex-start;
     align-items: center;
     padding-inline-start: 0px;
+    margin-top: 0;
+    margin-bottom: 0;
 }
 .filabtns{
     margin-right: 10px;
@@ -42,10 +44,12 @@ main{
     display: flex;
     justify-content: center; 
     align-items: center;
+    margin-top: 0;
+    margin-bottom: 0;
 
 }
 
-.btn{
+.mbtn{
     color: rgb(0, 0, 0)101;
     
     background-color: transparent;
