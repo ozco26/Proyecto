@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>Registrarse</title>
+    <link href="EstilosEncabezado.css" rel="stylesheet">
+
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="images/Monedero.png" alt="Logo de la página" >
+        </div>
+        <h1>Registro</h1>
+    </header>
+<br>
+<div class="contenedor">
+    <div class="formulario">
+        <form >
+        <h1 style="text-align: center; color: #1d5f75;">Registro </h1>
+        <p style="text-align: center;">Rellene el formulario con <br>sus datos personales <br> para poder usar la aplicación</p>
+            <input type="text" id="nombre" name="nombre" placeholder="Nombre" required><br><br>
+            <input type="text" id="cedula" name="cedula" placeholder="Cédula" required><br><br>
+            <input type="text" id="apellido" name="apellido" placeholder="Apellido" required><br><br>
+            <label for="fechaNacimiento">Fecha de Nacimiento</label>
+            <input type="date" id="fechaNacimiento" name="fechaNacimiento" required><br><br>
+            <input type="email" id="email" name="email" placeholder="su@correo.com" required><br><br>
+            <input type="password" id="password" name="password" placeholder="Password" required><br><br>           
+            <input type="submit" value="Registrarse">
+        </form>
+        <br><button onclick="window.location.href='LogIn.html'">Iniciar sesión</button><br>
+    </div>
+</div>
+
+</body>
+</html>
