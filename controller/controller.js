@@ -1,5 +1,4 @@
 const conexion = require('../database/db');
-const Swal = require('sweetalert2');
 
 
 function contarSimilitudes(query, params) {
@@ -12,8 +11,43 @@ function contarSimilitudes(query, params) {
       }
     });
   });
-}
+};
 
+//Metodo para guardar Rutas Creadas
+
+exports.saveRuta = async (req,res)=>{
+  const IDRuta = req.body.Id;
+  const Localidad = req.body.Localidad;
+  const Indicacion = req.body.Indicacion;
+
+  const check = 'SELECT COUNT(*) AS count FROM `ruta` WHERE idRuta = ?';
+
+  try {
+
+    const rutascheck = await contarSimilitudes(check, [IDRuta]);
+
+    if (rutascheck>0) {
+
+      console.log('Ya existe una ruta con esa ID');
+      res.render('/AdministradorViewCreateRuta')
+      
+    } else {
+      conexion.query('Insert into ruta SET ?', [{idRuta:IDRuta, localidad:Localidad, indicaciones:Indicacion}, IDRuta], (error, results) => {
+        if (error) {
+            console.log(error);
+        } else {
+            res.redirect('/');
+        }
+      });
+    }
+    
+  } catch (error) {
+    console.log(err);
+  }
+
+};
+
+//Metodo para guardar Usuarios Creados
 exports.saveUS = async (req, res) => {
   const Cedula = req.body.Cedula;
   const Nombre = req.body.Nombre;
@@ -63,12 +97,25 @@ exports.saveUS = async (req, res) => {
     }
   } catch (err) {
     console.log(err);
-    // Manejar errores de consulta
   }
 };
 
 
 //Actualizar 
+exports.updateRuta = async (req, res)=>{
+  const IDRuta = req.body.Id;
+  const Localidad = req.body.Localidad;
+  const Indicacion = req.body.Indicacion;
+
+  conexion.query('UPDATE ruta SET ? WHERE idRuta = ?', [{localidad:Localidad, indicaciones:Indicacion}, IDRuta], (error, results) => {
+    if (error) {
+        console.log(error);
+    } else {
+        res.redirect('/');
+    }
+  });
+}
+
 exports.updateUS = (req, res)=>{
   const Cedula = req.body.Cedula;
   const Nombre = req.body.Nombre;
@@ -77,24 +124,7 @@ exports.updateUS = (req, res)=>{
   const Correo = req.body.Correo;
   const Contrasena = req.body.Contrasena;
   const rol = req.body.rol;
-  
-  // Verificar si alguno de los campos requeridos está vacío o igual a un espacio en blanco
-  if (
-      Cedula.trim() === '' ||
-      Nombre.trim() === '' ||
-      Apellidos.trim() === '' ||
-      FechaNacimiento.trim() === '' ||
-      Correo.trim() === '' ||
-      Contrasena.trim() === '' ||
-      rol.trim() === ''
-  ) {
-      // Al menos uno de los campos está vacío, muestra una alerta
-     console.log('Por favor, completa todos los campos.');
-      return res.redirect('/');
-  }
-  
-  // Si todos los campos requeridos están llenos, ejecuta la consulta SQL
-  
+
   conexion.query('UPDATE usuario SET ? WHERE cedulaUsuario = ?', [{nombre:Nombre, apellidos:Apellidos, fechaNacimiento:FechaNacimiento, correo:Correo, contrasena:Contrasena, idRol:rol}, Cedula], (error, results) => {
       if (error) {
           console.log(error);

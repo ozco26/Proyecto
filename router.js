@@ -11,12 +11,23 @@ router.get('/', (req, res) => {
     FROM usuario
     INNER JOIN rol ON usuario.idRol = rol.idRol;
     `;
+
+    const sql2=`
+    SELECT * FROM ruta;
+    `;
     
     conexion.query(sql, (err, results) => {
         if (err) {
             throw err;
         } else {
-            res.render('AdministradorView', { results: results });
+            conexion.query(sql2, (err,results2)=>{
+                if (err) {
+                    throw err;
+                } else {
+                    res.render('AdministradorView', { results: results, results2:results2 });
+                }
+            })
+            
         }
     });
 });
@@ -47,11 +58,36 @@ router.get('/AdministradorViewEdit/:id', (req,res)=>{
     })
 });
 
-router.get('/AdministradorViewCreateUS', (req,res)=>{
-    res.render('AdministradorViewCreateUS');
+router.get('/AdministradorViewEditRuta/:id', (req,res)=>{
+    const id=req.params.id;
+    conexion.query('SELECT * FROM `ruta` where idRuta=?',[id], (err, results)=>{
+        if (err) {
+        
+            throw err;
+
+        }else{
+            res.render('AdministradorViewEditRuta',{ruta:results[0]});
+        }
+    })
 });
 
+router.get('/AdministradorViewCreateUS', (req,res)=>{
+
+    res.render('AdministradorViewCreateUS');
+    
+});
+
+router.get('/AdministradorViewCreateRuta', (req,res)=>{
+
+    res.render('AdministradorViewCreateRuta');
+    
+});
+
+
 router.post('/saveUS',controller.saveUS);
+router.post('/saveRuta',controller.saveRuta);
+
 router.post('/updateUS',controller.updateUS);
+router.post('/updateRuta',controller.updateRuta);
 
 module.exports=router;
