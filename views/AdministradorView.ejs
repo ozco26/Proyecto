@@ -17,13 +17,16 @@
         <nav class="cabezera__elementos">
             <h1 class="Elemento_Titulo">Pago Electronico - Administrador</h1>
         </nav>
-            <button Id="btn__desconectar" class="mbtn">Cerrar sesion</button>
+            <a href="/" Id="btn__desconectar" class="btn">Cerrar sesion</a>
     </header>
     <main class="mmain">
 
 <!--Tabla de usuarios-->
 
         <div class="container">
+            <br>
+        <br>
+            <h2>Tabla de usuarios</h2>
             <a href="/AdministradorViewCreateUS" class="btn btn-outline-primary mt-4"><i class="fa-solid fa-plus"></i></a>
             <table id="tablausuario" class="table table-bordered table-striped text-center">
                 <thead>
@@ -53,7 +56,7 @@
                             <td>
         
                                 <a href="/AdministradorViewEdit/<%=USUARIO.cedulaUsuario %>" class="btn btn-outline-info"><i class="fa-solid fa-pen-to-square"></i></a>
-                                <a  onclick="confirmar('<%= USUARIO.cedulaUsuario %>')" class="btn btn-outline-danger"><i class="fa-solid fa-trash" ></i></a>
+                                <a  onclick="confirmar('<%= USUARIO.cedulaUsuario %>','1')" class="btn btn-outline-danger"><i class="fa-solid fa-trash" ></i></a>
         
                             </td>
                         </tr>
@@ -64,8 +67,50 @@
             </table>
         </div>
 
+<!--Tabla de Chofer - Ruta -->
+
+    <div class="container">
+        <br>
+        <br>
+        <h2>Tabla de Chofer y Ruta</h2>
+
+        <a href="/AdministradorViewAsi" class="btn btn-outline-primary mt-4"><i class="fa-solid fa-plus"></i></a>
+        <table id="tablachoferruta" class="table table-bordered table-striped text-center">
+            <thead>
+                <tr class="bg-primary text-white">
+                    <th scope="col">Chofer</th>
+                    <th scope="col">Ruta</th>
+                    <th scope="col">Acciones</th>
+                    
+
+                </tr>
+            </thead>
+            <tbody>
+
+                <% results3.forEach((choferRuta)=>{ %>
+                    <tr>
+                        <td><%= choferRuta.nombre %></td>
+                        <td><%= choferRuta.localidad %></td>
+                        
+                        <td>
+
+                            <a  onclick="confirmar('<%= choferRuta.idRutaAsignada %>')" class="btn btn-outline-danger"><i class="fa-solid fa-trash" ></i></a>
+
+                        </td>
+                    </tr>
+
+                <% }) %>
+                
+            </tbody>
+        </table>
+    </div>
+
+
 <!--Tabla de rutas-->
         <div class="container">
+            <br>
+            <br>
+            <h2>Tabla rutas</h2>
             <a href="/AdministradorViewCreateRuta" class="btn btn-outline-primary mt-4"><i class="fa-solid fa-plus"></i></a>
             <table id="tablarutas" class="table table-bordered table-striped text-center">
                 <thead>
@@ -85,7 +130,7 @@
                             <td><%= RUTA.indicaciones %></td>
                             <td>
                                 <a href="/AdministradorViewEditRuta/<%=RUTA.idRuta%>" class="btn btn-outline-info"><i class="fa-solid fa-pen-to-square"></i></a>
-                                <a  onclick="confirmar('<%=RUTA.idRuta%>')" class="btn btn-outline-danger"><i class="fa-solid fa-trash" ></i></a>
+                                <a  onclick="confirmar('<%=RUTA.idRuta%>', '3')" class="btn btn-outline-danger"><i class="fa-solid fa-trash" ></i></a>
                             </td>
                         </tr>
         
@@ -108,8 +153,11 @@
         $(document).ready(function () {
             $('#tablarutas').DataTable();
         });
+        $(document).ready(function () {
+            $('#tablachoferruta').DataTable();
+        });
 
-        function confirmar(id) {
+        function confirmar(id ,tabla) {
             Swal.fire({
                 title: 'Esta seguro?',
                 text: "Eliminaras el registro permanentemente!",
@@ -120,7 +168,20 @@
                 confirmButtonText: 'Si, eliminar!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location = '/delete/' + id;
+
+                    switch (tabla) {
+                        case 1:
+                        window.location = '/delete/' + id;
+                        case 2:
+                        window.location = '/delete2/' +id;
+                        case 3:
+                        window.location = '/delete3/' +id;
+                            break;
+                    
+                        default:
+                            break;
+                    }
+                    
                 }
             })
         }

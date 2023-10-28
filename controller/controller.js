@@ -15,6 +15,60 @@ function contarSimilitudes(query, params) {
 
 //Metodo para guardar Rutas Creadas
 
+exports.saveReg = async (req,res)=>{
+  const Cedula = req.body.Cedula;
+  const Nombre = req.body.Nombre;
+  const Apellidos = req.body.Apellidos;
+  const FechaNacimiento = req.body.FechaNacimiento;
+  const Correo = req.body.Correo;
+  const Contrasena = req.body.Contrasena;
+  const rol = req.body.rol;
+
+  const check1 = 'SELECT COUNT(*) as count FROM usuario WHERE cedulaUsuario = ?';
+  const check2 = 'SELECT COUNT(*) as count FROM usuario WHERE correo = ?';
+
+  try {
+    const cedulacheck = await contarSimilitudes(check1, [Cedula]);
+    const checkcorreo = await contarSimilitudes(check2, [Correo]);
+
+    if (cedulacheck > 0) {
+
+      console.log('Las cedulas similares fueron: '+cedulacheck);
+      res.redirect('/AdministradorViewCreateUS');
+      
+    } else if (checkcorreo > 0) {
+      console.log('Los correos similares fueron: '+checkcorreo);
+      res.redirect('/AdministradorViewCreateUS');
+
+    } else {
+      
+      conexion.query(
+        'INSERT INTO usuario SET ?',
+        {
+          cedulaUsuario: Cedula,
+          nombre: Nombre,
+          apellidos: Apellidos,
+          fechaNacimiento: FechaNacimiento,
+          correo: Correo,
+          contrasena: Contrasena,
+          idRol: rol,
+        },
+        (err, results) => {
+          if (err) {
+            console.log(err);
+          } else {
+            
+            res.redirect('/');
+          }
+        }
+      );
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+
 exports.saveRuta = async (req,res)=>{
   const IDRuta = req.body.Id;
   const Localidad = req.body.Localidad;
@@ -36,7 +90,7 @@ exports.saveRuta = async (req,res)=>{
         if (error) {
             console.log(error);
         } else {
-            res.redirect('/');
+            res.redirect('/MainAdmin');
         }
       });
     }
@@ -90,7 +144,8 @@ exports.saveUS = async (req, res) => {
           if (err) {
             console.log(err);
           } else {
-            res.redirect('/');
+            
+            res.redirect('/MainAdmin');
           }
         }
       );
@@ -111,7 +166,7 @@ exports.updateRuta = async (req, res)=>{
     if (error) {
         console.log(error);
     } else {
-        res.redirect('/');
+        res.redirect('/MainAdmin');
     }
   });
 }
@@ -129,8 +184,32 @@ exports.updateUS = (req, res)=>{
       if (error) {
           console.log(error);
       } else {
-          res.redirect('/');
+          res.redirect('/MainAdmin');
       }
   });
   
+};
+
+// Método de LogIn para validar el correo y la contraseña
+exports.loguearse = (req, res) => {
+  const correo = req.body.correo;
+  const contrasena = req.body.contrasena;
+
+  conexion.query(
+    "SELECT * FROM usuario WHERE correo = ? AND contrasena = ?",
+    [correo, contrasena],
+    (err, results) => {
+      if (err) {
+        throw err;
+      } else {
+        if (results.length > 0) {
+          res.redirect("/MainAdmin");
+        } else {
+          res.render("login", {
+            error: "Credenciales incorrectas. Inténtalo de nuevo.",
+          });
+        }
+      }
+    }
+  );
 };
