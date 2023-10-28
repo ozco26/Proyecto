@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LogIn</title>
+    <style>
+      /* Login form */
+      .login-form,
+      .contenedor {
+        width: 300px;
+        margin: 0 auto;
+      }
+      .login-form h1 {
+        text-align: center;
+        color: midnightblue;
+        font-size: 28px;
+        padding: 70px 0 10px 0;
+      }
+      .login-form input[type="password"],
+      .login-form input[type="email"] {
+        width: 100%;
+        padding: 15px;
+        border: 1px solid #ced4da;
+        margin-bottom: 10px;
+        box-sizing: border-box;
+      }
+
+      /* Estilos boton LOGIN*/
+      .btn-login {
+        width: 100%;
+        padding: 15px;
+        background-color: #6f42c1;
+        border: 0;
+        box-sizing: border-box;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: large;
+        color: #ffffff;
+      }
+      .btn-login:hover,
+      .btn-login:active {
+        color: #fff;
+        background-color: #61428f;
+        border-color: #61428f;
+      }
+      .btn-login:focus {
+        box-shadow: 0 0 0 3px rgba(121, 82, 179, 0.25);
+      }
+
+      /* Estilos boton REGISTER*/
+      .btn-register {
+        width: 100%;
+        padding: 15px;
+        background-color: #34d399;
+        border: 0;
+        box-sizing: border-box;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: large;
+        color: #ffffff;
+        margin-top: 20px;
+        text-align: center;
+
+        /* Para dar la apariencia de un boton */
+        -webkit-appearance: button;
+        -moz-appearance: button;
+        appearance: button;
+        text-decoration: none;
+      }
+      .btn-register:hover,
+      .btn-register:active {
+        color: #fff;
+        background-color: #10b981;
+        border-color: #10b981;
+      }
+      .btn-register:focus {
+        box-shadow: 0 0 0 3px #10b981;
+      }
+    </style>
+  </head>
+  
+  <body>
+    <div class="login-form">
+        <h1>LogIn</h1>
+        <form action="loguearse" method="POST">
+            <input type="email" name="correo" placeholder="Correo" required />
+            <input type="password" name="contrasena" placeholder="Contrasena" required />
+            <input type="submit" class="btn-login" value="Login" />
+        </form>
+        <a href="/Register" class="btn-register">Register</a>
+    
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    
+        <% if (typeof alert !="undefined" ) { %>
+            <script>
+                Swal.fire({
+                    title: '<%= alertTitle %>',
+                    text: '<%= alertMessage %>',
+                    icon: '<%= alertIcon %>',
+                    showConfirmButton: '<%= showConfirmButton %>',
+                    timer: '<%= timer %>'
+                }).then(() => {
+                    window.location = '/<%= ruta %>'
+                })
+            </script>
+            <% } %>
+    </div>
+  </body>
+</html>

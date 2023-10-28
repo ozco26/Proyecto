@@ -1,0 +1,73 @@
+
+
+.mbody{
+    font-family: 'Poppins', sans-serif;
+    background-color: #E8F9FF;
+    margin: 0px 0;
+}
+
+.mmain{
+    margin-left: 20%;
+    margin-right: 20%;
+}
+
+.cabezera{
+    background-color: #1D5F75;
+    color: #000000;
+    padding: 5px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cabezera__elementos{
+    display: flex;
+    align-items: center;
+}
+
+.Elemento_Titulo{
+    padding-left: 20px;
+}
+
+.btns__en__tabla{
+    list-style: none;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding-inline-start: 0px;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+.filabtns{
+    margin-right: 10px;
+    text-align: center;
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    margin-top: 0;
+    margin-bottom: 0;
+
+}
+
+.mbtn{
+    color: rgb(0, 0, 0)101;
+    
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    
+    
+}
+.btn_informe{
+    position: relative;
+    border: none;
+    cursor: pointer;
+}
+
+.btn__tablas{
+    min-width: 150px;
+    padding: 20px 10px;
+    background-color: #1D5F75;
+    border: none;
+    cursor: pointer;
+}
