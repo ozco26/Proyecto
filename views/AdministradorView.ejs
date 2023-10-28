@@ -94,7 +94,7 @@
                         
                         <td>
 
-                            <a  onclick="confirmar('<%= choferRuta.idRutaAsignada %>')" class="btn btn-outline-danger"><i class="fa-solid fa-trash" ></i></a>
+                            <a  onclick="confirmar('<%= choferRuta.idRutaAsignada %>','2')" class="btn btn-outline-danger"><i class="fa-solid fa-trash" ></i></a>
 
                         </td>
                     </tr>
@@ -170,12 +170,14 @@
                 if (result.isConfirmed) {
 
                     switch (tabla) {
-                        case 1:
-                        window.location = '/delete/' + id;
-                        case 2:
-                        window.location = '/delete2/' +id;
-                        case 3:
-                        window.location = '/delete3/' +id;
+                        case '1':
+                            window.location = '/delete/' + id;
+                            break;
+                        case '2':
+                            window.location = '/delete2/' +id;
+                            break;
+                        case '3':
+                            window.location = '/delete3/' +id;
                             break;
                     
                         default:
