@@ -83,10 +83,13 @@
   <body>
     <div class="login-form">
         <h1>LogIn</h1>
-        <form action="loguearse" method="POST">
+        <form action="/loguearse" method="POST">
             <input type="email" name="correo" placeholder="Correo" required />
             <input type="password" name="contrasena" placeholder="Contrasena" required />
             <input type="submit" class="btn-login" value="Login" />
+            <br>
+            <button type="submit" class="btn btn-primary" tabindex="5">Guardar</button>
+
         </form>
         <a href="/Register" class="btn-register">Register</a>
     

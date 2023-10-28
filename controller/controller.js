@@ -13,6 +13,66 @@ function contarSimilitudes(query, params) {
   });
 };
 
+/*
+function obtenerUsuarioPorCredenciales(correo, contrasena) {
+  return new Promise((resolve, reject) => {
+    const query = 'SELECT * FROM usuario WHERE correo = ? AND contrasena = ?';
+    conexion.query(query, [correo, contrasena], (err, result) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(result[0]); 
+      }
+    });
+  });
+}
+*/
+
+
+exports.saveRutaUsuario = async(req,res)=>{
+
+  const rutachoferID = req.body.Id;
+  const localidad =req.body.localidad;
+  const nombre =req.body.nombre;
+
+  const check1 = 'SELECT COUNT(*) as count FROM ruta_usuario where idRutaAsignada=?'
+
+  try {
+    const existecheck = await contarSimilitudes(check1, [rutachoferID]);
+
+    if (existecheck > 0) {
+
+      console.log('Las cedulas similares fueron: '+existecheck);
+      res.redirect('/AdministradorViewAsi');
+      
+    }
+
+    conexion.query(
+      'INSERT INTO ruta_usuario SET ?',
+      {
+        idRutaAsignada: rutachoferID,
+        
+        cedulaUsuario: nombre,
+        idRuta: localidad,
+        
+      },
+      (err, results) => {
+        if (err) {
+          console.log(err);
+        } else {
+          
+          res.redirect('/MainAdmin');
+        }
+      }
+    );
+
+  } catch (error) {
+    console.log(error);
+    res.redirect('/AdministradorViewAsi');
+
+  }
+}
+
 //Metodo para guardar Rutas Creadas
 
 exports.saveReg = async (req,res)=>{
@@ -191,25 +251,34 @@ exports.updateUS = (req, res)=>{
 };
 
 // Método de LogIn para validar el correo y la contraseña
-exports.loguearse = (req, res) => {
+exports.loguearse = async (req, res) => {
   const correo = req.body.correo;
   const contrasena = req.body.contrasena;
 
-  conexion.query(
-    "SELECT * FROM usuario WHERE correo = ? AND contrasena = ?",
-    [correo, contrasena],
-    (err, results) => {
-      if (err) {
-        throw err;
+  const query = 'SELECT * FROM usuario WHERE correo = ? AND contrasena = ?';
+  conexion.query(query, [correo, contrasena], (err, result) => {
+    if (err) {
+      throw err;
+    } else {
+      try {
+        console.log('Usuario encontrado:', result[0]);
+      if (result[0].idRol === 1) {
+        res.redirect("/MainAdmin");
+      } else if (result[0].idRol === 2) {
+        res.redirect("/UsuarioView");
+      } else if (result[0].idRol === 3) {
+        res.redirect("/ChoferView");
+      } else if (result[0].idRol === 4) {
+        res.redirect("/BloqueadoView");
       } else {
-        if (results.length > 0) {
-          res.redirect("/MainAdmin");
-        } else {
-          res.render("login", {
-            error: "Credenciales incorrectas. Inténtalo de nuevo.",
-          });
-        }
+        console.log('Falle en comprobacion');
+        res.redirect('/');
       }
+      } catch (error) {
+        console.log('Usuario no existe')
+        res.redirect('/');
+      }
+      
     }
-  );
+  });
 };

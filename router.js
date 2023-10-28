@@ -32,10 +32,11 @@ router.get('/MainAdmin', (req, res) => {
     `;
 
     const sql3=`
-    SELECT ru.idRutaAsignada, u.nombre, r.localidad
-    FROM ruta_usuario ru
-    JOIN usuario u ON ru.cedulaUsuario = u.cedulaUsuario
+    SELECT ru.idRutaAsignada, u.nombre, r.localidad 
+    FROM ruta_usuario ru 
+    JOIN usuario u ON ru.cedulaUsuario = u.cedulaUsuario 
     JOIN ruta r ON ru.idRutaAsignada = r.idRuta;
+
 
 
     `;
@@ -89,12 +90,41 @@ router.get('/delete2/:id', (req, res) => {
 
 router.get('/delete3/:id', (req, res) => {
     const id = req.params.id;
-    conexion.query('DELETE FROM `ruta` WHERE  idRuta = ?',[id], (error, results)=>{
+    conexion.query('DELETE FROM ruta WHERE idRuta = ?',[id], (error, results)=>{
         if(error){
             console.log(error);
         }else{           
             res.redirect('/MainAdmin');         
         }
+    })
+});
+
+
+router.get('/AdministradorViewAsi', (req,res)=>{
+    const consultarchofer=`
+
+    SELECT * FROM usuario WHERE idRol='3'
+    
+    `;
+    const consultarruta=`
+
+    SELECT * FROM ruta
+    
+    `;
+
+    conexion.query(consultarchofer, (err,chofer)=>{
+        if (err) {
+            throw err;
+        } else {
+            conexion.query(consultarruta, (err,ruta)=>{
+                if (err) {
+                    throw err;
+                } else {
+                    res.render('AdministradorViewAsi',{chofer:chofer, ruta:ruta});
+                };
+            });
+            
+        };
     })
 });
 
@@ -137,9 +167,24 @@ router.get('/AdministradorViewCreateRuta', (req,res)=>{
     
 });
 
+router.get('/BloqueadoView', (req,res)=>{
 
+    res.render('BloqueadoView');
+    
+});
+router.get('/UsuarioView', (req,res)=>{
+
+    res.render('UsuarioView');
+    
+});
+router.get('/ChoferView', (req,res)=>{
+
+    res.render('ChoferView');
+    
+});
 router.post("/loguearse", controller.loguearse);
 router.post('/saveUS',controller.saveUS);
+router.post('/saveRutaUsuario',controller.saveRutaUsuario);
 router.post('/saveReg',controller.saveReg);
 router.post('/saveRuta',controller.saveRuta);
 router.post('/updateUS',controller.updateUS);
