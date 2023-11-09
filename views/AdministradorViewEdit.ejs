@@ -50,9 +50,16 @@
                                 <option <%= user.rol=='1' ? "selected" : '' %> value="1">Admin</option>
                                 <option <%= user.rol=='2' ? "selected" : '' %> value="2">Cliente</option>
                                 <option <%= user.rol=='3' ? "selected" : '' %> value="3">Chofer</option>
-                                <option <%= user.rol=='4' ? "selected" : '' %> value="4">Bloqueado</option>
+                                
                             </select>
                         </div>
+                        <div class="mb-3">
+                          <label for="estado" class="form-label">Estado</label>
+                          <select id="estado" name="estado" class="form-select" aria-label="Default select example">
+                              <option <%= user.estadoUsuario=='A' ? "selected" : '' %>value="A">Activo</option>
+                              <option <%= user.estadoUsuario=='B' ? "selected" : '' %>value="B">Bloqueado</option>
+                          </select>
+                      </div>
                             <button type="submit" class="btn btn-primary" tabindex="5">Guardar</button>
                             <a href="/MainAdmin" class="btn btn-secundary">Cancelar</a>
                     </form>    

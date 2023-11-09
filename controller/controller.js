@@ -13,21 +13,6 @@ function contarSimilitudes(query, params) {
   });
 };
 
-/*
-function obtenerUsuarioPorCredenciales(correo, contrasena) {
-  return new Promise((resolve, reject) => {
-    const query = 'SELECT * FROM usuario WHERE correo = ? AND contrasena = ?';
-    conexion.query(query, [correo, contrasena], (err, result) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(result[0]); 
-      }
-    });
-  });
-}
-*/
-
 
 exports.saveRutaUsuario = async(req,res)=>{
 
@@ -49,9 +34,7 @@ exports.saveRutaUsuario = async(req,res)=>{
 
     conexion.query(
       'INSERT INTO ruta_usuario SET ?',
-      {
-        idRutaAsignada: rutachoferID,
-        
+      {        
         cedulaUsuario: nombre,
         idRuta: localidad,
         
@@ -199,6 +182,7 @@ exports.saveUS = async (req, res) => {
           correo: Correo,
           contrasena: Contrasena,
           idRol: rol,
+          estadoUsuario: 'A'
         },
         (err, results) => {
           if (err) {
@@ -239,8 +223,9 @@ exports.updateUS = (req, res)=>{
   const Correo = req.body.Correo;
   const Contrasena = req.body.Contrasena;
   const rol = req.body.rol;
+  const estado =req.body.estado;
 
-  conexion.query('UPDATE usuario SET ? WHERE cedulaUsuario = ?', [{nombre:Nombre, apellidos:Apellidos, fechaNacimiento:FechaNacimiento, correo:Correo, contrasena:Contrasena, idRol:rol}, Cedula], (error, results) => {
+  conexion.query('UPDATE usuario SET ? WHERE cedulaUsuario = ?', [{nombre:Nombre, apellidos:Apellidos, fechaNacimiento:FechaNacimiento, correo:Correo, contrasena:Contrasena, idRol:rol, estadoUsuario:estado}, Cedula], (error, results) => {
       if (error) {
           console.log(error);
       } else {
@@ -261,19 +246,23 @@ exports.loguearse = async (req, res) => {
       throw err;
     } else {
       try {
+
         console.log('Usuario encontrado:', result[0]);
-      if (result[0].idRol === 1) {
-        res.redirect("/MainAdmin");
-      } else if (result[0].idRol === 2) {
-        res.redirect("/UsuarioView");
-      } else if (result[0].idRol === 3) {
-        res.redirect("/ChoferView");
-      } else if (result[0].idRol === 4) {
-        res.redirect("/BloqueadoView");
-      } else {
-        console.log('Falle en comprobacion');
-        res.redirect('/');
-      }
+
+        if (result[0].estadoUsuario === 'A') {
+          if (result[0].idRol === 1) {
+            res.redirect("/MainAdmin");
+          } else if (result[0].idRol === 2) {
+            res.redirect("/UsuarioView");
+          } else if (result[0].idRol === 3) {
+            res.redirect("/ChoferView");
+          } else {
+            console.log('Falle en comprobacion');
+            res.redirect('/');
+          }
+        }else if(result[0].estadoUsuario === 'B'){
+          res.redirect("/BloqueadoView");
+        }
       } catch (error) {
         console.log('Usuario no existe')
         res.redirect('/');
