@@ -1,4 +1,5 @@
 const conexion = require('../database/db');
+const crypto = require('crypto');
 
 
 function contarSimilitudes(query, params) {
@@ -13,6 +14,12 @@ function contarSimilitudes(query, params) {
   });
 };
 
+// Función para generar un hash
+function generarHash(algoritmo, datos) {
+  const hash = crypto.createHash(algoritmo);
+  
+  return hash.digest('hex');
+}
 
 exports.saveRutaUsuario = async(req,res)=>{
 
@@ -57,7 +64,6 @@ exports.saveRutaUsuario = async(req,res)=>{
 }
 
 //Metodo para guardar Rutas Creadas
-
 exports.saveReg = async (req,res)=>{
   const Cedula = req.body.Cedula;
   const Nombre = req.body.Nombre;
@@ -66,6 +72,8 @@ exports.saveReg = async (req,res)=>{
   const Correo = req.body.Correo;
   const Contrasena = req.body.Contrasena;
   const rol = req.body.rol;
+  const algoritmo = 'sha256'; 
+  const hash = generarHash(algoritmo, Contrasena);
 
   const check1 = 'SELECT COUNT(*) as count FROM usuario WHERE cedulaUsuario = ?';
   const check2 = 'SELECT COUNT(*) as count FROM usuario WHERE correo = ?';
@@ -93,8 +101,9 @@ exports.saveReg = async (req,res)=>{
           apellidos: Apellidos,
           fechaNacimiento: FechaNacimiento,
           correo: Correo,
-          contrasena: Contrasena,
+          contrasena: hash,
           idRol: rol,
+          estadoUsuario: 'A'
         },
         (err, results) => {
           if (err) {
@@ -110,7 +119,6 @@ exports.saveReg = async (req,res)=>{
     console.log(err);
   }
 };
-
 
 exports.saveRuta = async (req,res)=>{
   const IDRuta = req.body.Id;
@@ -153,6 +161,8 @@ exports.saveUS = async (req, res) => {
   const Correo = req.body.Correo;
   const Contrasena = req.body.Contrasena;
   const rol = req.body.rol;
+  const algoritmo = 'sha256'; 
+  const hash = generarHash(algoritmo, Contrasena);
 
   const check1 = 'SELECT COUNT(*) as count FROM usuario WHERE cedulaUsuario = ?';
   const check2 = 'SELECT COUNT(*) as count FROM usuario WHERE correo = ?';
@@ -180,7 +190,7 @@ exports.saveUS = async (req, res) => {
           apellidos: Apellidos,
           fechaNacimiento: FechaNacimiento,
           correo: Correo,
-          contrasena: Contrasena,
+          contrasena: hash,
           idRol: rol,
           estadoUsuario: 'A'
         },
@@ -198,7 +208,6 @@ exports.saveUS = async (req, res) => {
     console.log(err);
   }
 };
-
 
 //Actualizar 
 exports.updateRuta = async (req, res)=>{
@@ -224,8 +233,10 @@ exports.updateUS = (req, res)=>{
   const Contrasena = req.body.Contrasena;
   const rol = req.body.rol;
   const estado =req.body.estado;
+  const algoritmo = 'sha256'; 
+  const hash = generarHash(algoritmo, Contrasena);
 
-  conexion.query('UPDATE usuario SET ? WHERE cedulaUsuario = ?', [{nombre:Nombre, apellidos:Apellidos, fechaNacimiento:FechaNacimiento, correo:Correo, contrasena:Contrasena, idRol:rol, estadoUsuario:estado}, Cedula], (error, results) => {
+  conexion.query('UPDATE usuario SET ? WHERE cedulaUsuario = ?', [{nombre:Nombre, apellidos:Apellidos, fechaNacimiento:FechaNacimiento, correo:hash, contrasena:Contrasena, idRol:rol, estadoUsuario:estado}, Cedula], (error, results) => {
       if (error) {
           console.log(error);
       } else {
@@ -239,9 +250,11 @@ exports.updateUS = (req, res)=>{
 exports.loguearse = async (req, res) => {
   const correo = req.body.correo;
   const contrasena = req.body.contrasena;
+  const algoritmo = 'sha256'; 
+  const hash = generarHash(algoritmo, contrasena);
 
   const query = 'SELECT * FROM usuario WHERE correo = ? AND contrasena = ?';
-  conexion.query(query, [correo, contrasena], (err, result) => {
+  conexion.query(query, [correo, hash], (err, result) => {
     if (err) {
       throw err;
     } else {
