@@ -236,7 +236,7 @@ exports.updateUS = (req, res)=>{
   const algoritmo = 'sha256'; 
   const hash = generarHash(algoritmo, Contrasena);
 
-  conexion.query('UPDATE usuario SET ? WHERE cedulaUsuario = ?', [{nombre:Nombre, apellidos:Apellidos, fechaNacimiento:FechaNacimiento, correo:hash, contrasena:Contrasena, idRol:rol, estadoUsuario:estado}, Cedula], (error, results) => {
+  conexion.query('UPDATE usuario SET ? WHERE cedulaUsuario = ?', [{nombre:Nombre, apellidos:Apellidos, fechaNacimiento:FechaNacimiento, correo:Correo, contrasena:hash, idRol:rol, estadoUsuario:estado}, Cedula], (error, results) => {
       if (error) {
           console.log(error);
       } else {
@@ -254,7 +254,7 @@ exports.loguearse = async (req, res) => {
   const hash = generarHash(algoritmo, contrasena);
 
   const query = 'SELECT * FROM usuario WHERE correo = ? AND contrasena = ?';
-  conexion.query(query, [correo, hash], (err, result) => {
+  conexion.query(query, [correo, contrasena], (err, result) => {
     if (err) {
       throw err;
     } else {
@@ -275,9 +275,13 @@ exports.loguearse = async (req, res) => {
           }
         }else if(result[0].estadoUsuario === 'B'){
           res.redirect("/BloqueadoView");
+          // Mostrar el error en un pop-up
+          
+          
         }
       } catch (error) {
         console.log('Usuario no existe')
+        
         res.redirect('/');
       }
       
