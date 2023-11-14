@@ -21,23 +21,27 @@ router.get('/Register', (req,res)=>{
 //Llena la tabla usuario\
 
 router.get('/MainAdmin', (req, res) => {
+
     const sql = `
+    
     SELECT usuario.*, rol.nombreRol
     FROM usuario
     INNER JOIN rol ON usuario.idRol = rol.idRol;
+
     `;
 
     const sql2=`
+
     SELECT * FROM ruta;
+
     `;
 
     const sql3=`
+
     SELECT ru.idRutaAsignada, u.nombre, r.localidad 
     FROM ruta_usuario ru 
     JOIN usuario u ON ru.cedulaUsuario = u.cedulaUsuario 
-    JOIN ruta r ON ru.idRutaAsignada = r.idRuta;
-
-
+    JOIN ruta r ON ru.idRuta = r.idRuta;
 
     `;
     

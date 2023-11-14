@@ -31,6 +31,7 @@
             <table id="tablausuario" class="table table-bordered table-striped text-center">
                 <thead>
                     <tr class="bg-primary text-white">
+                        <th scope="col">ID</th>
                         <th scope="col">CEDULA</th>
                         <th scope="col">NOMBRE</th>
                         <th scope="col">APELLIDO</th>
@@ -38,14 +39,15 @@
                         <th scope="col">CORREO</th>
                         <th scope="col">CONTRASEÑA</th>
                         <th scope="col">ROL</th>
+                        <th scrope="col">ESTADO</th>
                         <th scope="col">ACCION</th>
-
                     </tr>
                 </thead>
                 <tbody>
 
                     <% results.forEach((USUARIO)=>{ %>
                         <tr>
+                            <td><%= USUARIO.ID %></td>
                             <td><%= USUARIO.cedulaUsuario %></td>
                             <td><%= USUARIO.nombre %></td>
                             <td><%= USUARIO.apellidos %></td>
@@ -53,6 +55,7 @@
                             <td><%= USUARIO.correo %></td>
                             <td><%= USUARIO.contrasena %></td>
                             <td><%= USUARIO.nombreRol %></td>
+                            <td><%= USUARIO.estadoUsuario %></td>
                             <td>
         
                                 <a href="/AdministradorViewEdit/<%=USUARIO.cedulaUsuario %>" class="btn btn-outline-info"><i class="fa-solid fa-pen-to-square"></i></a>
@@ -99,7 +102,7 @@
                         </td>
                     </tr>
 
-                <% }) %>
+                <% }); %>
                 
             </tbody>
         </table>
