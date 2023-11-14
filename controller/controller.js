@@ -254,7 +254,7 @@ exports.loguearse = async (req, res) => {
   const hash = generarHash(algoritmo, contrasena);
 
   const query = 'SELECT * FROM usuario WHERE correo = ? AND contrasena = ?';
-  conexion.query(query, [correo, contrasena], (err, result) => {
+  conexion.query(query, [correo, hash], (err, result) => {
     if (err) {
       throw err;
     } else {
@@ -274,6 +274,7 @@ exports.loguearse = async (req, res) => {
             res.redirect('/');
           }
         }else if(result[0].estadoUsuario === 'B'){
+          
           res.redirect("/BloqueadoView");
           // Mostrar el error en un pop-up
           
@@ -281,10 +282,13 @@ exports.loguearse = async (req, res) => {
         }
       } catch (error) {
         console.log('Usuario no existe')
-        
+         
+        const mensajeError = "Usuario no existe";
+        alert(mensajeError);
         res.redirect('/');
       }
       
     }
   });
 };
+
