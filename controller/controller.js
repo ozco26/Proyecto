@@ -125,6 +125,7 @@ exports.saveRuta = async (req,res)=>{
   const IDRuta = req.body.Id;
   const Localidad = req.body.Localidad;
   const Indicacion = req.body.Indicacion;
+  const Precio = req.body.Precio;
 
   const check = 'SELECT COUNT(*) AS count FROM `ruta` WHERE idRuta = ?';
 
@@ -138,7 +139,7 @@ exports.saveRuta = async (req,res)=>{
       res.render('/AdministradorViewCreateRuta')
       
     } else {
-      conexion.query('Insert into ruta SET ?', [{idRuta:IDRuta, localidad:Localidad, indicaciones:Indicacion}, IDRuta], (error, results) => {
+      conexion.query('Insert into ruta SET ?', [{idRuta:IDRuta, localidad:Localidad, indicaciones:Indicacion, precio:Precio}, IDRuta], (error, results) => {
         if (error) {
             console.log(error);
         } else {
@@ -215,8 +216,9 @@ exports.updateRuta = async (req, res)=>{
   const IDRuta = req.body.Id;
   const Localidad = req.body.Localidad;
   const Indicacion = req.body.Indicacion;
+  const Precio = req.body.Precio;
 
-  conexion.query('UPDATE ruta SET ? WHERE idRuta = ?', [{localidad:Localidad, indicaciones:Indicacion}, IDRuta], (error, results) => {
+  conexion.query('UPDATE ruta SET ? WHERE idRuta = ?', [{localidad:Localidad, indicaciones:Indicacion, precio:Precio}, IDRuta], (error, results) => {
     if (error) {
         console.log(error);
     } else {

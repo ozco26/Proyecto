@@ -4,6 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <title>crud- edit</title>
   </head>
@@ -12,20 +13,25 @@
       <% if (ruta) { %>
         <div class="container mt-4">          
             <div class="card border-secondary">  
-                  <div class="card-header">Editar Registro</div>
+                  <div class="card-header">Editar Ruta</div>
                   <div class="card-body">
 
-                    <form action="/updateRuta" method="POST">
+                    <form id="formAdmEdiRut" action="/updateRuta" method="POST">
                         <input id="Id" name="Id" value="<%= ruta.idRuta %>" hidden>
 
                         <div class="mb-3">
                           <label for="Localidad" class="form-label">Localidad</label>
-                          <input type="text" class="form-control" id="Localidad" name="Localidad" tabindex="2"
+                          <input type="text" class="form-control" id="Localidad" name="Localidad" tabindex="1"
                           value="<%= ruta.localidad %>">
                         </div>
                         <div class="mb-3">
-                          <label for="Indicacion" class="form-label">Hora de Salida</label>
+                          <label for="Indicacion" class="form-label">Indicaion</label>
                           <input type="text" class="form-control" id="Indicacion" name="Indicacion" tabindex="2"
+                          value="<%= ruta.indicaciones %>">
+                        </div>
+                        <div class="mb-3">
+                          <label for="Precio" class="form-label">Precio</label>
+                          <input type="number" class="form-control" id="Precio" name="Precio" tabindex="3"
                           value="<%= ruta.indicaciones %>">
                         </div>
                                                 
@@ -41,4 +47,34 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
   </body>
+
+  <script>
+    document.getElementById('formAdmEdiRut').addEventListener('submit', function (event) {
+      event.preventDefault();
+      var pendiente;
+  
+      if (validateForm()) {
+        this.submit();
+      } else {
+        // Utiliza SweetAlert en lugar de alert
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops... información pendiente ',
+          text: 'Por favor, complete todos los campos del formulario.',
+        });
+      }
+    });
+  
+    function validateForm() {
+        var id = document.getElementById('Id').value;
+        var localidad = document.getElementById('Localidad').value;
+        var indicacion = document.getElementById('Indicacion').value;
+        var precio = document.getElementById('Precio').value;
+
+        if (id === '' || localidad === '' || indicacion === '' || precio === '') {
+          return false;
+        } else {
+        return true;}
+    }
+    </script>
 </html>
