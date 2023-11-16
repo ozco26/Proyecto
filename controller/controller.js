@@ -1,3 +1,4 @@
+const { log } = require('console');
 const conexion = require('../database/db');
 const crypto = require('crypto');
 
@@ -17,7 +18,7 @@ function contarSimilitudes(query, params) {
 // Función para generar un hash
 function generarHash(algoritmo, datos) {
   const hash = crypto.createHash(algoritmo);
-  
+  hash.update(datos);
   return hash.digest('hex');
 }
 
@@ -246,48 +247,55 @@ exports.updateUS = (req, res)=>{
   
 };
 
-// Método de LogIn para validar el correo y la contraseña
 exports.loguearse = async (req, res) => {
   const correo = req.body.correo;
   const contrasena = req.body.contrasena;
-  const algoritmo = 'sha256'; 
+  const algoritmo = "sha256";
   const hash = generarHash(algoritmo, contrasena);
 
-  const query = 'SELECT * FROM usuario WHERE correo = ? AND contrasena = ?';
+  const query = "SELECT * FROM usuario WHERE correo = ? AND contrasena = ?";
   conexion.query(query, [correo, hash], (err, result) => {
     if (err) {
       throw err;
     } else {
       try {
+        console.log("Usuario encontrado:", result[0]);
+        if (hash === result[0].contrasena) {
+          if (result[0].estadoUsuario === "A") {
+            if (result[0].idRol === 1) {
+              res.redirect("/MainAdmin");
+            } else if (result[0].idRol === 2) {
+              res.redirect("/UsuarioView");
+            } else if (result[0].idRol === 3) {
+              res.redirect("/ChoferView");
+            } else {
+              console.log("Fallo en comprobacion");
 
-        console.log('Usuario encontrado:', result[0]);
-
-        if (result[0].estadoUsuario === 'A') {
-          if (result[0].idRol === 1) {
-            res.redirect("/MainAdmin");
-          } else if (result[0].idRol === 2) {
-            res.redirect("/UsuarioView");
-          } else if (result[0].idRol === 3) {
-            res.redirect("/ChoferView");
-          } else {
-            console.log('Falle en comprobacion');
-            res.redirect('/');
+              res.locals.popupMessage =
+                "Fallo en comprobacion, pongase en contacto con la administración";
+              res.render("Login");
+              res.locals.mostrarMensaje = true; // Nueva variable para indicar que se debe mostrar el mensaje
+            }
+          } else if (result[0].estadoUsuario === "B") {
+            console.log("Usuario Bloqueado");
+            res.locals.popupMessage =
+              "Usuario Bloqueado, pongase en contacto con la administración";
+            res.render("Login");
+            res.locals.mostrarMensaje = true; // Nueva variable para indicar que se debe mostrar el mensaje
           }
-        }else if(result[0].estadoUsuario === 'B'){
-          
-          res.redirect("/BloqueadoView");
-          // Mostrar el error en un pop-up
-          
-          
+        } else {
+          console.log("Contraseña Invalida");
+          res.locals.popupMessage =
+            "Contraseña Inválida o Usuario no encontrado";
+          res.locals.mostrarMensaje = true; // Nueva variable para indicar que se debe mostrar el mensaje
+          res.render("Login");
         }
-      } catch (error) {
-        console.log('Usuario no existe')
-         
-        const mensajeError = "Usuario no existe";
-        alert(mensajeError);
-        res.redirect('/');
+      } catch (err) {
+        console.log("Usuario no existe");
+        res.locals.popupMessage = "Contraseña Inválida o Usuario no encontrado";
+        res.render("Login");
+        res.locals.mostrarMensaje = true; // Nueva variable para indicar que se debe mostrar el mensaje
       }
-      
     }
   });
 };

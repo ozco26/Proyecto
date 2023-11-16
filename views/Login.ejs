@@ -81,6 +81,8 @@
   </head>
   
   <body>
+    <% var mostrarMensaje ; %>
+    <% var popupMessage %>
     <div class="login-form">
         <h1>LogIn</h1>
         <form action="/loguearse" method="POST">
@@ -89,25 +91,27 @@
             <input type="submit" class="btn-login" value="Login" />
             <br>
             <button type="submit" class="btn btn-primary" tabindex="5">Guardar</button>
-
         </form>
         <a href="/Register" class="btn-register">Register</a>
-    
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    
-        <% if (typeof alert !="undefined" ) { %>
-            <script>
-                Swal.fire({
-                    title: '<%= alertTitle %>',
-                    text: '<%= alertMessage %>',
-                    icon: '<%= alertIcon %>',
-                    showConfirmButton: '<%= showConfirmButton %>',
-                    timer: '<%= timer %>'
-                }).then(() => {
-                    window.location = '/<%= ruta %>'
-                })
-            </script>
-            <% } %>
-    </div>
+
+        </div>   
   </body>
+
+  <div id="oculto" style{"<%= mostrarMensaje ? 'display: block;' : 'display: none;' %>"}></div>
+  <script>
+    // Utiliza el mensaje enviado desde el servidor para mostrar el SweetAlert
+    document.addEventListener('DOMContentLoaded', function() {
+        const mensaje = "<%= popupMessage %>";
+        if (mensaje) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: mensaje
+            });
+        }
+    });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
 </html>
