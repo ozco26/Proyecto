@@ -13,6 +13,21 @@ function contarSimilitudes(query, params) {
   });
 };
 
+function traermonedero(usuario) {
+  return new Promise((resolve, reject) => {
+    const buscarmonedero = 'SELECT * FROM monedero WHERE usuarioref = ?';
+
+    conexion.query(buscarmonedero, [usuario], (err, monedero) => {
+      if (err) {
+        console.error(err);
+        reject(err);
+      } else {
+        console.log("Monedero encontrado:", monedero[0]);
+        resolve(monedero[0]);
+      }
+    });
+  });
+}
 
 exports.saveRutaUsuario = async(req,res)=>{
 
@@ -241,33 +256,52 @@ exports.loguearse = async (req, res) => {
   const contrasena = req.body.contrasena;
 
   const query = 'SELECT * FROM usuario WHERE correo = ? AND contrasena = ?';
+  const buscarmonedero = 'SELECT * FROM monedero WHERE usuarioref = ?';
+  const obtenerHistorial = 'SELECT * FROM transacciones WHERE idUsuario = ?';
+
   conexion.query(query, [correo, contrasena], (err, result) => {
     if (err) {
       throw err;
     } else {
       try {
-
         console.log('Usuario encontrado:', result[0]);
 
         if (result[0].estadoUsuario === 'A') {
           if (result[0].idRol === 1) {
             res.redirect("/MainAdmin");
           } else if (result[0].idRol === 2) {
-            res.redirect("/UsuarioView");
+
+            
+            conexion.query(buscarmonedero, [result[0].cedulaUsuario], (err, monedero) => {
+              if (err) {
+                console.error(err);
+              } else {
+                console.log("Monedero encontrado: ", monedero[0]);
+                conexion.query(obtenerHistorial, [result[0].cedulaUsuario],(err, historial)=>{
+                  if (err) {
+                    throw err
+                  } else {
+                    console.log("Historial: "+historial[0])
+                    res.render("UsuarioView", { usuario: result[0], monedero: monedero[0], historial: historial[0], transaccion: historial[0]});
+                  }
+                });
+                
+              }
+            });
+
           } else if (result[0].idRol === 3) {
             res.redirect("/ChoferView");
           } else {
             console.log('Falle en comprobacion');
             res.redirect('/');
           }
-        }else if(result[0].estadoUsuario === 'B'){
+        } else if (result[0].estadoUsuario === 'B') {
           res.redirect("/BloqueadoView");
         }
       } catch (error) {
         console.log('Usuario no existe')
         res.redirect('/');
       }
-      
     }
   });
 };

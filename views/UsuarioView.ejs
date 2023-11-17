@@ -3,9 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chofer</title>
+    
+    <link rel="stylesheet" type="text/css" href="/AdministradorView.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+
+    <title>Prueba</title>
+    
 </head>
-<body>
-    <h1>Usuario</h1>
+<body class="mbody">
+
+    <% if (usuario && monedero) {%>
+    
+        <div id="saldo">
+            <h2>Saldo</h2>
+            <br>
+            <p><strong>Saldo Disponible:</strong> <%= monedero.saldo%></p>
+            <br><br>
+            <input id="inputmonto" type="number" placeholder="Ingrese monto (max. 4 dígitos)" maxlength="4" oninput="validarInput()"/>
+            <button onclick="recargarsaldo()">Recargar Saldo</button>
+            <br><br>
+            <h2>Historial</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Viaje</th>
+                        <th>Fecha</th>
+                        <th>Costo</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    //F
+                    <% if (transaccion) { %>
+                        <% results.forEach((transaccion)=>{ %>
+                            <tr>
+                                <td><%= transaccion.viaje %></td>
+                                <td><%= transaccion.fecha instanceof Date ? transaccion.fechatoISOString().substring(0, 10) : '' %></td>
+                                
+                            </tr>
+            
+                        <% }) %>
+                    <% } %>
+                    
+                </tbody>
+            </table>
+            <button>Generar Reporte</button>
+        </div>
+
+    <% } %>
+    <script>
+        function validarInput() {
+            var inputMonto = document.getElementById("inputmonto");
+            inputMonto.value = inputMonto.value.replace(/[^0-9]/g, ''); // Eliminar no números
+            if (inputMonto.value.length > 4) {
+                inputMonto.value = inputMonto.value.slice(0, 4); // Limitar a 5 dígitos
+            }
+        }
+
+        function recargarsaldo(){
+            
+        } 
+    </script>
 </body>
 </html>
