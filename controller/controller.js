@@ -1,7 +1,6 @@
-const { log } = require('console');
-const conexion = require('../database/db');
-const crypto = require('crypto');
-
+const { log } = require("console");
+const conexion = require("../database/db");
+const crypto = require("crypto");
 
 function contarSimilitudes(query, params) {
   return new Promise((resolve, reject) => {
@@ -13,11 +12,11 @@ function contarSimilitudes(query, params) {
       }
     });
   });
-};
+}
 
 function traermonedero(usuario) {
   return new Promise((resolve, reject) => {
-    const buscarmonedero = 'SELECT * FROM monedero WHERE usuarioref = ?';
+    const buscarmonedero = "SELECT * FROM monedero WHERE usuarioref = ?";
 
     conexion.query(buscarmonedero, [usuario], (err, monedero) => {
       if (err) {
@@ -29,56 +28,52 @@ function traermonedero(usuario) {
       }
     });
   });
+}
 
-  function generarHash(algoritmo, datos) {
+function generarHash(algoritmo, datos) {
   const hash = crypto.createHash(algoritmo);
   hash.update(datos);
-  return hash.digest('hex');
+  return hash.digest("hex");
+}
 
-exports.saveRutaUsuario = async(req,res)=>{
-
+exports.saveRutaUsuario = async (req, res) => {
   const rutachoferID = req.body.Id;
-  const localidad =req.body.localidad;
-  const nombre =req.body.nombre;
+  const localidad = req.body.localidad;
+  const nombre = req.body.nombre;
 
-  const check1 = 'SELECT COUNT(*) as count FROM ruta_usuario where idRutaAsignada=?'
+  const check1 =
+    "SELECT COUNT(*) as count FROM ruta_usuario where idRutaAsignada=?";
 
   try {
     const existecheck = await contarSimilitudes(check1, [rutachoferID]);
 
     if (existecheck > 0) {
-
-      console.log('Las cedulas similares fueron: '+existecheck);
-      res.redirect('/AdministradorViewAsi');
-      
+      console.log("Las cedulas similares fueron: " + existecheck);
+      res.redirect("/AdministradorViewAsi");
     }
 
     conexion.query(
-      'INSERT INTO ruta_usuario SET ?',
-      {        
+      "INSERT INTO ruta_usuario SET ?",
+      {
         cedulaUsuario: nombre,
         idRuta: localidad,
-        
       },
       (err, results) => {
         if (err) {
           console.log(err);
         } else {
-          
-          res.redirect('/MainAdmin');
+          res.redirect("/MainAdmin");
         }
       }
     );
-
   } catch (error) {
     console.log(error);
-    res.redirect('/AdministradorViewAsi');
-
+    res.redirect("/AdministradorViewAsi");
   }
-}
+};
 
 //Metodo para guardar Rutas Creadas
-exports.saveReg = async (req,res)=>{
+exports.saveReg = async (req, res) => {
   const Cedula = req.body.Cedula;
   const Nombre = req.body.Nombre;
   const Apellidos = req.body.Apellidos;
@@ -86,29 +81,26 @@ exports.saveReg = async (req,res)=>{
   const Correo = req.body.Correo;
   const Contrasena = req.body.Contrasena;
   const rol = req.body.rol;
-  const algoritmo = 'sha256'; 
+  const algoritmo = "sha256";
   const hash = generarHash(algoritmo, Contrasena);
 
-  const check1 = 'SELECT COUNT(*) as count FROM usuario WHERE cedulaUsuario = ?';
-  const check2 = 'SELECT COUNT(*) as count FROM usuario WHERE correo = ?';
+  const check1 =
+    "SELECT COUNT(*) as count FROM usuario WHERE cedulaUsuario = ?";
+  const check2 = "SELECT COUNT(*) as count FROM usuario WHERE correo = ?";
 
   try {
     const cedulacheck = await contarSimilitudes(check1, [Cedula]);
     const checkcorreo = await contarSimilitudes(check2, [Correo]);
 
     if (cedulacheck > 0) {
-
-      console.log('Las cedulas similares fueron: '+cedulacheck);
-      res.redirect('/AdministradorViewCreateUS');
-      
+      console.log("Las cedulas similares fueron: " + cedulacheck);
+      res.redirect("/AdministradorViewCreateUS");
     } else if (checkcorreo > 0) {
-      console.log('Los correos similares fueron: '+checkcorreo);
-      res.redirect('/AdministradorViewCreateUS');
-
+      console.log("Los correos similares fueron: " + checkcorreo);
+      res.redirect("/AdministradorViewCreateUS");
     } else {
-      
       conexion.query(
-        'INSERT INTO usuario SET ?',
+        "INSERT INTO usuario SET ?",
         {
           cedulaUsuario: Cedula,
           nombre: Nombre,
@@ -117,14 +109,13 @@ exports.saveReg = async (req,res)=>{
           correo: Correo,
           contrasena: hash,
           idRol: rol,
-          estadoUsuario: 'A'
+          estadoUsuario: "A",
         },
         (err, results) => {
           if (err) {
             console.log(err);
           } else {
-            
-            res.redirect('/');
+            res.redirect("/");
           }
         }
       );
@@ -134,37 +125,44 @@ exports.saveReg = async (req,res)=>{
   }
 };
 
-exports.saveRuta = async (req,res)=>{
+exports.saveRuta = async (req, res) => {
   const IDRuta = req.body.Id;
   const Localidad = req.body.Localidad;
   const Indicacion = req.body.Indicacion;
   const Precio = req.body.Precio;
 
-  const check = 'SELECT COUNT(*) AS count FROM `ruta` WHERE idRuta = ?';
+  const check = "SELECT COUNT(*) AS count FROM `ruta` WHERE idRuta = ?";
 
   try {
-
     const rutascheck = await contarSimilitudes(check, [IDRuta]);
 
-    if (rutascheck>0) {
-
-      console.log('Ya existe una ruta con esa ID');
-      res.render('/AdministradorViewCreateRuta')
-      
+    if (rutascheck > 0) {
+      console.log("Ya existe una ruta con esa ID");
+      res.render("/AdministradorViewCreateRuta");
     } else {
-      conexion.query('Insert into ruta SET ?', [{idRuta:IDRuta, localidad:Localidad, indicaciones:Indicacion, precio:Precio}, IDRuta], (error, results) => {
-        if (error) {
+      conexion.query(
+        "Insert into ruta SET ?",
+        [
+          {
+            idRuta: IDRuta,
+            localidad: Localidad,
+            indicaciones: Indicacion,
+            precio: Precio,
+          },
+          IDRuta,
+        ],
+        (error, results) => {
+          if (error) {
             console.log(error);
-        } else {
-            res.redirect('/MainAdmin');
+          } else {
+            res.redirect("/MainAdmin");
+          }
         }
-      });
+      );
     }
-    
   } catch (error) {
     console.log(err);
   }
-
 };
 
 //Metodo para guardar Usuarios Creados
@@ -176,29 +174,26 @@ exports.saveUS = async (req, res) => {
   const Correo = req.body.Correo;
   const Contrasena = req.body.Contrasena;
   const rol = req.body.rol;
-  const algoritmo = 'sha256'; 
+  const algoritmo = "sha256";
   const hash = generarHash(algoritmo, Contrasena);
 
-  const check1 = 'SELECT COUNT(*) as count FROM usuario WHERE cedulaUsuario = ?';
-  const check2 = 'SELECT COUNT(*) as count FROM usuario WHERE correo = ?';
+  const check1 =
+    "SELECT COUNT(*) as count FROM usuario WHERE cedulaUsuario = ?";
+  const check2 = "SELECT COUNT(*) as count FROM usuario WHERE correo = ?";
 
   try {
     const cedulacheck = await contarSimilitudes(check1, [Cedula]);
     const checkcorreo = await contarSimilitudes(check2, [Correo]);
 
     if (cedulacheck > 0) {
-
-      console.log('Las cedulas similares fueron: '+cedulacheck);
-      res.redirect('/AdministradorViewCreateUS');
-      
+      console.log("Las cedulas similares fueron: " + cedulacheck);
+      res.redirect("/AdministradorViewCreateUS");
     } else if (checkcorreo > 0) {
-      console.log('Los correos similares fueron: '+checkcorreo);
-      res.redirect('/AdministradorViewCreateUS');
-
+      console.log("Los correos similares fueron: " + checkcorreo);
+      res.redirect("/AdministradorViewCreateUS");
     } else {
-      
       conexion.query(
-        'INSERT INTO usuario SET ?',
+        "INSERT INTO usuario SET ?",
         {
           cedulaUsuario: Cedula,
           nombre: Nombre,
@@ -207,14 +202,13 @@ exports.saveUS = async (req, res) => {
           correo: Correo,
           contrasena: hash,
           idRol: rol,
-          estadoUsuario: 'A'
+          estadoUsuario: "A",
         },
         (err, results) => {
           if (err) {
             console.log(err);
           } else {
-            
-            res.redirect('/MainAdmin');
+            res.redirect("/MainAdmin");
           }
         }
       );
@@ -224,23 +218,30 @@ exports.saveUS = async (req, res) => {
   }
 };
 
-//Actualizar 
-exports.updateRuta = async (req, res)=>{
+//Actualizar
+exports.updateRuta = async (req, res) => {
   const IDRuta = req.body.Id;
   const Localidad = req.body.Localidad;
   const Indicacion = req.body.Indicacion;
   const Precio = req.body.Precio;
 
-  conexion.query('UPDATE ruta SET ? WHERE idRuta = ?', [{localidad:Localidad, indicaciones:Indicacion, precio:Precio}, IDRuta], (error, results) => {
-    if (error) {
+  conexion.query(
+    "UPDATE ruta SET ? WHERE idRuta = ?",
+    [
+      { localidad: Localidad, indicaciones: Indicacion, precio: Precio },
+      IDRuta,
+    ],
+    (error, results) => {
+      if (error) {
         console.log(error);
-    } else {
-        res.redirect('/MainAdmin');
+      } else {
+        res.redirect("/MainAdmin");
+      }
     }
-  });
-}
+  );
+};
 
-exports.updateUS = (req, res)=>{
+exports.updateUS = (req, res) => {
   const Cedula = req.body.Cedula;
   const Nombre = req.body.Nombre;
   const Apellidos = req.body.Apellidos;
@@ -248,18 +249,32 @@ exports.updateUS = (req, res)=>{
   const Correo = req.body.Correo;
   const Contrasena = req.body.Contrasena;
   const rol = req.body.rol;
-  const estado =req.body.estado;
-  const algoritmo = 'sha256'; 
+  const estado = req.body.estado;
+  const algoritmo = "sha256";
   const hash = generarHash(algoritmo, Contrasena);
 
-  conexion.query('UPDATE usuario SET ? WHERE cedulaUsuario = ?', [{nombre:Nombre, apellidos:Apellidos, fechaNacimiento:FechaNacimiento, correo:Correo, contrasena:hash, idRol:rol, estadoUsuario:estado}, Cedula], (error, results) => {
+  conexion.query(
+    "UPDATE usuario SET ? WHERE cedulaUsuario = ?",
+    [
+      {
+        nombre: Nombre,
+        apellidos: Apellidos,
+        fechaNacimiento: FechaNacimiento,
+        correo: Correo,
+        contrasena: hash,
+        idRol: rol,
+        estadoUsuario: estado,
+      },
+      Cedula,
+    ],
+    (error, results) => {
       if (error) {
-          console.log(error);
+        console.log(error);
       } else {
-          res.redirect('/MainAdmin');
+        res.redirect("/MainAdmin");
       }
-  });
-  
+    }
+  );
 };
 
 exports.loguearse = async (req, res) => {
@@ -268,18 +283,15 @@ exports.loguearse = async (req, res) => {
   const algoritmo = "sha256";
   const hash = generarHash(algoritmo, contrasena);
 
-  
-   const query = 'SELECT * FROM usuario WHERE correo = ? AND contrasena = ?';
-  const buscarmonedero = 'SELECT * FROM monedero WHERE usuarioref = ?';
-  const obtenerHistorial = 'SELECT * FROM transacciones WHERE idUsuario = ?';
-  
-   conexion.query(query, [correo, hash], (err, result) => {
-    
+  const query = "SELECT * FROM usuario WHERE correo = ? AND contrasena = ?";
+  const buscarmonedero = "SELECT * FROM monedero WHERE usuarioref = ?";
+  const obtenerHistorial = "SELECT * FROM transacciones WHERE idUsuario = ?";
+
+  conexion.query(query, [correo, hash], (err, result) => {
     if (err) {
       throw err;
     } else {
       try {
-
         console.log("Usuario encontrado:", result[0]);
         if (hash === result[0].contrasena) {
           if (result[0].estadoUsuario === "A") {
@@ -287,26 +299,35 @@ exports.loguearse = async (req, res) => {
               res.redirect("/MainAdmin");
             } else if (result[0].idRol === 2) {
               
-              
-              
-              conexion.query(buscarmonedero, [result[0].cedulaUsuario], (err, monedero) => {
-              if (err) {
-                console.error(err);
-              } else {
-                console.log("Monedero encontrado: ", monedero[0]);
-                conexion.query(obtenerHistorial, [result[0].cedulaUsuario],(err, historial)=>{
+              conexion.query(
+                buscarmonedero,
+                [result[0].cedulaUsuario],
+                (err, monedero) => {
                   if (err) {
-                    throw err
+                    console.error(err);
                   } else {
-                    console.log("Historial: "+historial[0])
-                    res.render("UsuarioView", { usuario: result[0], monedero: monedero[0], historial: historial[0], transaccion: historial[0]});
+                    console.log("Monedero encontrado: ", monedero[0]);
+                    conexion.query(
+                      obtenerHistorial,
+                      [result[0].cedulaUsuario],
+                      (err, historial) => {
+                        if (err) {
+                          throw err;
+                        } else {
+                          console.log("Historial: " + historial[0]);
+                          res.render("UsuarioView", {
+                            usuario: result[0],
+                            monedero: monedero[0],
+                            historial: historial[0],
+                            transaccion: historial[0],
+                          });
+                        }
+                      }
+                    );
                   }
-                });
-                
-              }
-            });
-             // res.redirect("/UsuarioView");
-              
+                }
+              );
+               res.redirect("/UsuarioView");
             } else if (result[0].idRol === 3) {
               res.redirect("/ChoferView");
             } else {
@@ -330,7 +351,6 @@ exports.loguearse = async (req, res) => {
             "Contraseña Inválida o Usuario no encontrado";
           res.locals.mostrarMensaje = true; // Nueva variable para indicar que se debe mostrar el mensaje
           res.render("Login");
-
         }
       } catch (err) {
         console.log("Usuario no existe");
