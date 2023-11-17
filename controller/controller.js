@@ -27,7 +27,7 @@ function traermonedero(usuario) {
       }
     });
   });
-}
+};
 
 exports.saveRutaUsuario = async(req,res)=>{
 
