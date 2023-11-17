@@ -287,13 +287,13 @@ exports.loguearse = async (req, res) => {
   const buscarmonedero = "SELECT * FROM monedero WHERE usuarioref = ?";
   const obtenerHistorial = "SELECT * FROM transacciones WHERE idUsuario = ?";
 
-  conexion.query(query, [correo, hash], (err, result) => {
+  conexion.query(query, [correo, contrasena], (err, result) => { //hash
     if (err) {
       throw err;
     } else {
       try {
         console.log("Usuario encontrado:", result[0]);
-        if (hash === result[0].contrasena) {
+        if (contrasena === result[0].contrasena) {  //hash
           if (result[0].estadoUsuario === "A") {
             if (result[0].idRol === 1) {
               res.redirect("/MainAdmin");
