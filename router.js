@@ -78,6 +78,24 @@ router.get('/delete/:id', (req, res) => {
         }
     })
 });
+
+//Recargar saldo usuario
+
+router.get('/recargar/:cedula/:saldo', (req, res)=>{
+
+    const cedula = req.params.cedula;
+    const saldo = req.params.saldo;
+    const updateQuery = 'UPDATE monedero SET saldo = saldo + ? WHERE usuarioref = ?';
+
+    conexion.query(updateQuery,[{saldo},cedula], (error, saldo)=>{
+        if(error){
+            console.log(error);
+        }else{           
+                    
+        }
+    });
+})
+
 //Ruta eliminar choferruta
 
 router.get('/delete2/:id', (req, res) => {
