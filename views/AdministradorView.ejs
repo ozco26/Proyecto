@@ -28,6 +28,7 @@
         <br>
             <h2>Tabla de usuarios</h2>
             <a href="/AdministradorViewCreateUS" class="btn btn-outline-primary mt-4"><i class="fa-solid fa-plus"></i></a>
+            <div style="display: flex; justify-content: center">
             <table id="tablausuario" class="table table-bordered table-striped text-center">
                 <thead>
                     <tr class="bg-primary text-white">
@@ -68,6 +69,7 @@
                     
                 </tbody>
             </table>
+        </div>
         </div>
 
 <!--Tabla de Chofer - Ruta -->
@@ -120,6 +122,7 @@
                     <tr class="bg-primary text-white">
                         <th scope="col">Id</th>
                         <th scope="col">Localidad</th>
+                        <th scope="col">indicaciones</th>
                         <th scope="col">Precio</th>
                         <th scope="col">Acciones</th>
                     </tr>
@@ -131,6 +134,7 @@
                             <td><%= RUTA.idRuta %></td>
                             <td><%= RUTA.localidad %></td>
                             <td><%= RUTA.indicaciones %></td>
+                            <td><%= RUTA.precio %></td>
                             <td>
                                 <a href="/AdministradorViewEditRuta/<%=RUTA.idRuta%>" class="btn btn-outline-info"><i class="fa-solid fa-pen-to-square"></i></a>
                                 <a  onclick="confirmar('<%=RUTA.idRuta%>', '3')" class="btn btn-outline-danger"><i class="fa-solid fa-trash" ></i></a>

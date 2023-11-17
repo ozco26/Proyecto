@@ -1,4 +1,6 @@
+const { log } = require('console');
 const conexion = require('../database/db');
+const crypto = require('crypto');
 
 
 function contarSimilitudes(query, params) {
@@ -27,7 +29,11 @@ function traermonedero(usuario) {
       }
     });
   });
-}
+
+  function generarHash(algoritmo, datos) {
+  const hash = crypto.createHash(algoritmo);
+  hash.update(datos);
+  return hash.digest('hex');
 
 exports.saveRutaUsuario = async(req,res)=>{
 
@@ -72,7 +78,6 @@ exports.saveRutaUsuario = async(req,res)=>{
 }
 
 //Metodo para guardar Rutas Creadas
-
 exports.saveReg = async (req,res)=>{
   const Cedula = req.body.Cedula;
   const Nombre = req.body.Nombre;
@@ -81,6 +86,8 @@ exports.saveReg = async (req,res)=>{
   const Correo = req.body.Correo;
   const Contrasena = req.body.Contrasena;
   const rol = req.body.rol;
+  const algoritmo = 'sha256'; 
+  const hash = generarHash(algoritmo, Contrasena);
 
   const check1 = 'SELECT COUNT(*) as count FROM usuario WHERE cedulaUsuario = ?';
   const check2 = 'SELECT COUNT(*) as count FROM usuario WHERE correo = ?';
@@ -108,8 +115,9 @@ exports.saveReg = async (req,res)=>{
           apellidos: Apellidos,
           fechaNacimiento: FechaNacimiento,
           correo: Correo,
-          contrasena: Contrasena,
+          contrasena: hash,
           idRol: rol,
+          estadoUsuario: 'A'
         },
         (err, results) => {
           if (err) {
@@ -126,11 +134,11 @@ exports.saveReg = async (req,res)=>{
   }
 };
 
-
 exports.saveRuta = async (req,res)=>{
   const IDRuta = req.body.Id;
   const Localidad = req.body.Localidad;
   const Indicacion = req.body.Indicacion;
+  const Precio = req.body.Precio;
 
   const check = 'SELECT COUNT(*) AS count FROM `ruta` WHERE idRuta = ?';
 
@@ -144,7 +152,7 @@ exports.saveRuta = async (req,res)=>{
       res.render('/AdministradorViewCreateRuta')
       
     } else {
-      conexion.query('Insert into ruta SET ?', [{idRuta:IDRuta, localidad:Localidad, indicaciones:Indicacion}, IDRuta], (error, results) => {
+      conexion.query('Insert into ruta SET ?', [{idRuta:IDRuta, localidad:Localidad, indicaciones:Indicacion, precio:Precio}, IDRuta], (error, results) => {
         if (error) {
             console.log(error);
         } else {
@@ -168,6 +176,8 @@ exports.saveUS = async (req, res) => {
   const Correo = req.body.Correo;
   const Contrasena = req.body.Contrasena;
   const rol = req.body.rol;
+  const algoritmo = 'sha256'; 
+  const hash = generarHash(algoritmo, Contrasena);
 
   const check1 = 'SELECT COUNT(*) as count FROM usuario WHERE cedulaUsuario = ?';
   const check2 = 'SELECT COUNT(*) as count FROM usuario WHERE correo = ?';
@@ -195,7 +205,7 @@ exports.saveUS = async (req, res) => {
           apellidos: Apellidos,
           fechaNacimiento: FechaNacimiento,
           correo: Correo,
-          contrasena: Contrasena,
+          contrasena: hash,
           idRol: rol,
           estadoUsuario: 'A'
         },
@@ -214,14 +224,14 @@ exports.saveUS = async (req, res) => {
   }
 };
 
-
 //Actualizar 
 exports.updateRuta = async (req, res)=>{
   const IDRuta = req.body.Id;
   const Localidad = req.body.Localidad;
   const Indicacion = req.body.Indicacion;
+  const Precio = req.body.Precio;
 
-  conexion.query('UPDATE ruta SET ? WHERE idRuta = ?', [{localidad:Localidad, indicaciones:Indicacion}, IDRuta], (error, results) => {
+  conexion.query('UPDATE ruta SET ? WHERE idRuta = ?', [{localidad:Localidad, indicaciones:Indicacion, precio:Precio}, IDRuta], (error, results) => {
     if (error) {
         console.log(error);
     } else {
@@ -239,8 +249,10 @@ exports.updateUS = (req, res)=>{
   const Contrasena = req.body.Contrasena;
   const rol = req.body.rol;
   const estado =req.body.estado;
+  const algoritmo = 'sha256'; 
+  const hash = generarHash(algoritmo, Contrasena);
 
-  conexion.query('UPDATE usuario SET ? WHERE cedulaUsuario = ?', [{nombre:Nombre, apellidos:Apellidos, fechaNacimiento:FechaNacimiento, correo:Correo, contrasena:Contrasena, idRol:rol, estadoUsuario:estado}, Cedula], (error, results) => {
+  conexion.query('UPDATE usuario SET ? WHERE cedulaUsuario = ?', [{nombre:Nombre, apellidos:Apellidos, fechaNacimiento:FechaNacimiento, correo:Correo, contrasena:hash, idRol:rol, estadoUsuario:estado}, Cedula], (error, results) => {
       if (error) {
           console.log(error);
       } else {
@@ -250,29 +262,34 @@ exports.updateUS = (req, res)=>{
   
 };
 
-// Método de LogIn para validar el correo y la contraseña
 exports.loguearse = async (req, res) => {
   const correo = req.body.correo;
   const contrasena = req.body.contrasena;
+  const algoritmo = "sha256";
+  const hash = generarHash(algoritmo, contrasena);
 
-  const query = 'SELECT * FROM usuario WHERE correo = ? AND contrasena = ?';
+  
+   const query = 'SELECT * FROM usuario WHERE correo = ? AND contrasena = ?';
   const buscarmonedero = 'SELECT * FROM monedero WHERE usuarioref = ?';
   const obtenerHistorial = 'SELECT * FROM transacciones WHERE idUsuario = ?';
-
-  conexion.query(query, [correo, contrasena], (err, result) => {
+  
+   conexion.query(query, [correo, hash], (err, result) => {
+    
     if (err) {
       throw err;
     } else {
       try {
-        console.log('Usuario encontrado:', result[0]);
 
-        if (result[0].estadoUsuario === 'A') {
-          if (result[0].idRol === 1) {
-            res.redirect("/MainAdmin");
-          } else if (result[0].idRol === 2) {
-
-            
-            conexion.query(buscarmonedero, [result[0].cedulaUsuario], (err, monedero) => {
+        console.log("Usuario encontrado:", result[0]);
+        if (hash === result[0].contrasena) {
+          if (result[0].estadoUsuario === "A") {
+            if (result[0].idRol === 1) {
+              res.redirect("/MainAdmin");
+            } else if (result[0].idRol === 2) {
+              
+              
+              
+              conexion.query(buscarmonedero, [result[0].cedulaUsuario], (err, monedero) => {
               if (err) {
                 console.error(err);
               } else {
@@ -288,19 +305,38 @@ exports.loguearse = async (req, res) => {
                 
               }
             });
+             // res.redirect("/UsuarioView");
+              
+            } else if (result[0].idRol === 3) {
+              res.redirect("/ChoferView");
+            } else {
+              console.log("Fallo en comprobacion");
 
-          } else if (result[0].idRol === 3) {
-            res.redirect("/ChoferView");
-          } else {
-            console.log('Falle en comprobacion');
-            res.redirect('/');
+              res.locals.popupMessage =
+                "Fallo en comprobacion, pongase en contacto con la administración";
+              res.render("Login");
+              res.locals.mostrarMensaje = true; // Nueva variable para indicar que se debe mostrar el mensaje
+            }
+          } else if (result[0].estadoUsuario === "B") {
+            console.log("Usuario Bloqueado");
+            res.locals.popupMessage =
+              "Usuario Bloqueado, pongase en contacto con la administración";
+            res.render("Login");
+            res.locals.mostrarMensaje = true; // Nueva variable para indicar que se debe mostrar el mensaje
           }
-        } else if (result[0].estadoUsuario === 'B') {
-          res.redirect("/BloqueadoView");
+        } else {
+          console.log("Contraseña Invalida");
+          res.locals.popupMessage =
+            "Contraseña Inválida o Usuario no encontrado";
+          res.locals.mostrarMensaje = true; // Nueva variable para indicar que se debe mostrar el mensaje
+          res.render("Login");
+
         }
-      } catch (error) {
-        console.log('Usuario no existe')
-        res.redirect('/');
+      } catch (err) {
+        console.log("Usuario no existe");
+        res.locals.popupMessage = "Contraseña Inválida o Usuario no encontrado";
+        res.render("Login");
+        res.locals.mostrarMensaje = true; // Nueva variable para indicar que se debe mostrar el mensaje
       }
     }
   });
