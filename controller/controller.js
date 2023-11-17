@@ -129,7 +129,7 @@ exports.saveRuta = async (req, res) => {
   const IDRuta = req.body.Id;
   const Localidad = req.body.Localidad;
   const Indicacion = req.body.Indicacion;
-  const Precio = req.body.Precio;
+  const Costo = req.body.Costo;
 
   const check = "SELECT COUNT(*) AS count FROM `ruta` WHERE idRuta = ?";
 
@@ -147,7 +147,7 @@ exports.saveRuta = async (req, res) => {
             idRuta: IDRuta,
             localidad: Localidad,
             indicaciones: Indicacion,
-            precio: Precio,
+            costo: Costo,
           },
           IDRuta,
         ],
@@ -223,14 +223,11 @@ exports.updateRuta = async (req, res) => {
   const IDRuta = req.body.Id;
   const Localidad = req.body.Localidad;
   const Indicacion = req.body.Indicacion;
-  const Precio = req.body.Precio;
+  const Costo = req.body.Costo;
 
   conexion.query(
     "UPDATE ruta SET ? WHERE idRuta = ?",
-    [
-      { localidad: Localidad, indicaciones: Indicacion, precio: Precio },
-      IDRuta,
-    ],
+    [{ localidad: Localidad, indicaciones: Indicacion, costo: Costo }, IDRuta],
     (error, results) => {
       if (error) {
         console.log(error);
@@ -287,18 +284,19 @@ exports.loguearse = async (req, res) => {
   const buscarmonedero = "SELECT * FROM monedero WHERE usuarioref = ?";
   const obtenerHistorial = "SELECT * FROM transacciones WHERE idUsuario = ?";
 
-  conexion.query(query, [correo, contrasena], (err, result) => { //hash
+  conexion.query(query, [correo, contrasena], (err, result) => {
+    //hash
     if (err) {
       throw err;
     } else {
       try {
         console.log("Usuario encontrado:", result[0]);
-        if (contrasena === result[0].contrasena) {  //hash
+        if (contrasena === result[0].contrasena) {
+          //hash
           if (result[0].estadoUsuario === "A") {
             if (result[0].idRol === 1) {
               res.redirect("/MainAdmin");
             } else if (result[0].idRol === 2) {
-              
               conexion.query(
                 buscarmonedero,
                 [result[0].cedulaUsuario],
@@ -327,7 +325,7 @@ exports.loguearse = async (req, res) => {
                   }
                 }
               );
-               res.redirect("/UsuarioView");
+              res.redirect("/UsuarioView");
             } else if (result[0].idRol === 3) {
               res.redirect("/ChoferView");
             } else {
