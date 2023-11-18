@@ -2,6 +2,7 @@ const { log } = require("console");
 const conexion = require("../database/db");
 const crypto = require("crypto");
 
+
 function contarSimilitudes(query, params) {
   return new Promise((resolve, reject) => {
     conexion.query(query, params, (err, result) => {
@@ -35,6 +36,31 @@ function generarHash(algoritmo, datos) {
   hash.update(datos);
   return hash.digest("hex");
 }
+
+
+exports.comprobarcobrar = async (req,res) => {
+
+  const buscarUsuarioMonedero = 'SELECT * FROM monedero WHERE usuarioref = ?';
+
+  conexion.query(buscarUsuarioMonedero, [usuario], (err, resultados) => {
+    if (err) {
+        throw err;
+    } else {
+      if (resultados.length > 0) {
+        const saldo = resultados[0].saldo;
+
+        if (saldo >= monto) {
+          
+        } else {
+          
+        }
+      } else {
+        
+      }
+    }
+  });
+
+};
 
 exports.saveRutaUsuario = async (req, res) => {
   const rutachoferID = req.body.Id;
@@ -281,6 +307,7 @@ exports.loguearse = async (req, res) => {
   const query = "SELECT * FROM usuario WHERE correo = ? AND contrasena = ?";
   const buscarmonedero = "SELECT * FROM monedero WHERE usuarioref = ?";
   const obtenerHistorial = "SELECT * FROM transacciones WHERE idUsuario = ?";
+  const rutaus = "SELECT r.* FROM ruta_usuario ru JOIN ruta r ON ru.idRuta = r.idRuta WHERE ru.cedulaUsuario = ? ;"
 
 
   conexion.query(query, [correo, hash], (err, result) => {
@@ -300,31 +327,44 @@ exports.loguearse = async (req, res) => {
               res.redirect("/MainAdmin");
 
             } else if (result[0].idRol === 2) {
-              conexion.query(buscarmonedero,[result[0].cedulaUsuario],(err, monedero) => {
-
-                  if (err) {
-                    console.error(err);
-                  } else {
-                    console.log("Monedero encontrado: ", monedero[0]);
-                    conexion.query(obtenerHistorial,[result[0].cedulaUsuario],(err, historial) => {
-                        if (err) {
-
-                          throw err;
-
-                        } else {
-
-                          console.log("Historial: " + historial[0]);
-                          res.render("UsuarioView", {usuario: result[0],monedero: monedero[0],transaccion: historial[0]});
-
-                        }
-                      }
-                    );
-                  }
-              });
+                
+              res.redirect('/UsuarioView/'+result[0].ID)
 
             } else if (result[0].idRol === 3) {
-              res.redirect("/ChoferView");
+              res.redirect('/ChoferView/'+result[0].ID);
+              /*
+              conexion.query(buscarmonedero,[result[0].cedulaUsuario],(err, monedero) => {
+
+                if (err) {
+                  console.error(err);
+                } else {
+                  console.log("Monedero encontrado: ", monedero[0]);
+                  conexion.query(obtenerHistorial,[result[0].cedulaUsuario],(err, historial) => {
+                      if (err) {
+
+                        throw err;
+
+                      } else {
+
+                        console.log("Historial: " + historial[0]);
+
+                        conexion.query(rutaus, [result[0].cedulaUsuario], (err, rutausuario)=>{
+
+                          if (err) {
+                            throw err;
+                          } else {
+                            console.log("Rutas y usuario: "+rutausuario[0]);
+                            res.render("ChoferView", {usuario: result[0],monedero: monedero[0],transaccion: historial[0], rutausuario:rutausuario[0]});
+
+                          }
+                        })
+                      }
+                  });
+                }
+            });
+            */
             } else {
+
               console.log("Fallo en comprobacion");
 
               res.locals.popupMessage =
