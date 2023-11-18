@@ -13,7 +13,7 @@ function contarSimilitudes(query, params) {
     });
   });
 }
-5;
+
 function traermonedero(usuario) {
   return new Promise((resolve, reject) => {
     const buscarmonedero = "SELECT * FROM monedero WHERE usuarioref = ?";
