@@ -94,8 +94,10 @@ exports.saveReg = async (req, res) => {
 
     if (cedulacheck > 0) {
       console.log("Las cedulas similares fueron: " + cedulacheck);
+
     } else if (checkcorreo > 0) {
       console.log("Los correos similares fueron: " + checkcorreo);
+
     } else {
       conexion.query(
         "INSERT INTO usuario SET ?",
@@ -127,7 +129,7 @@ exports.saveRuta = async (req, res) => {
   const IDRuta = req.body.Id;
   const Localidad = req.body.Localidad;
   const Indicacion = req.body.Indicacion;
-  const Precio = req.body.Precio;
+  const Costo = req.body.Costo;
 
   const check = "SELECT COUNT(*) AS count FROM `ruta` WHERE idRuta = ?";
 
@@ -145,7 +147,7 @@ exports.saveRuta = async (req, res) => {
             idRuta: IDRuta,
             localidad: Localidad,
             indicaciones: Indicacion,
-            precio: Precio,
+            costo: Costo,
           },
           IDRuta,
         ],
@@ -217,19 +219,16 @@ exports.saveUS = async (req, res) => {
 };
 
 //Actualizar
-
 exports.updateRuta = async (req, res) => {
   const IDRuta = req.body.Id;
   const Localidad = req.body.Localidad;
   const Indicacion = req.body.Indicacion;
-  const Precio = req.body.Precio;
+  const Costo = req.body.Costo;
 
   conexion.query(
     "UPDATE ruta SET ? WHERE idRuta = ?",
-    [
-      { localidad: Localidad, indicaciones: Indicacion, precio: Precio },
-      IDRuta,
-    ],
+    [{ localidad: Localidad, indicaciones: Indicacion, costo: Costo }, IDRuta],
+
     (error, results) => {
       if (error) {
         console.log(error);
@@ -249,8 +248,6 @@ exports.updateUS = (req, res) => {
   const Contrasena = req.body.Contrasena;
   const rol = req.body.rol;
   const estado = req.body.estado;
-
-
   conexion.query(
     "UPDATE usuario SET ? WHERE cedulaUsuario = ?",
     [
@@ -285,6 +282,7 @@ exports.loguearse = async (req, res) => {
   const buscarmonedero = "SELECT * FROM monedero WHERE usuarioref = ?";
   const obtenerHistorial = "SELECT * FROM transacciones WHERE idUsuario = ?";
 
+
   conexion.query(query, [correo, hash], (err, result) => {
     //hash
     if (err) {
@@ -293,6 +291,7 @@ exports.loguearse = async (req, res) => {
       try {
         console.log("Usuario encontrado:", result[0]);
         if (hash === result[0].contrasena) {
+
           //hash
           if (result[0].estadoUsuario === "A") {
 
@@ -301,13 +300,12 @@ exports.loguearse = async (req, res) => {
               res.redirect("/MainAdmin");
 
             } else if (result[0].idRol === 2) {
-
               conexion.query(buscarmonedero,[result[0].cedulaUsuario],(err, monedero) => {
+
                   if (err) {
                     console.error(err);
                   } else {
                     console.log("Monedero encontrado: ", monedero[0]);
-
                     conexion.query(obtenerHistorial,[result[0].cedulaUsuario],(err, historial) => {
                         if (err) {
 
@@ -323,6 +321,7 @@ exports.loguearse = async (req, res) => {
                     );
                   }
               });
+
             } else if (result[0].idRol === 3) {
               res.redirect("/ChoferView");
             } else {

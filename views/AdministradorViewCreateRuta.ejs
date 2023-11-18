@@ -32,8 +32,8 @@
               <input type="text" class="form-control" id="Indicacion" name="Indicacion" tabindex="3" >
             </div>
             <div class="mb-3">
-              <label for="Precio" class="form-label">Precio</label>
-              <input type="number" step="0.01" class="form-control" id="Precio" name="Precio" tabindex="4">
+              <label for="Costo" class="form-label">Costo</label>
+              <input type="number" step="0.01" class="form-control" id="Costo" name="Costo" tabindex="4">
             </div>
 
             <button type="submit" class="btn btn-primary" tabindex="5">Guardar</button>
@@ -64,9 +64,9 @@
         var id = document.getElementById('Id').value;
         var localidad = document.getElementById('Localidad').value;
         var indicacion = document.getElementById('Indicacion').value;
-        var precio = document.getElementById('Precio').value;
+        var costo = document.getElementById('Costo').value;
         
-        if (id === '' || localidad === '' || indicacion === '' || precio === '') {
+        if (id === '' || localidad === '' || indicacion === '' || costo === '') {
           return false;
         } else {
         return true;}
