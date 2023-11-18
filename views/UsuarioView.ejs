@@ -1,72 +1,198 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    
-    <link rel="stylesheet" type="text/css" href="/AdministradorView.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>Prueba</title>
+  </head>
+  <style>
+    /*HEADER*/
+    body {
+      margin: 0px;
+    }
+    .header {
+      background-color: #f1f1f1;
+    }
+    .header img {
+      padding: 5px 0px 5px 15px;
+      height: 50px;
+      width: 120px;
+      margin: 0 auto; /* Centra la imagen horizontalmente */
+      margin-bottom: 1px; /* Añade espacio inferior a la imagen */
+    }
+
+    .header a {
+      float: left;
+      color: black;
+      padding: 12px;
+      line-height: 36px;
+    }
+
+    .header a:hover {
+      background-color: #ddd;
+      color: black;
+    }
+
+    .header-right {
+      float: right;
+    }
+
+    .header img,
+    .header p {
+      display: inline-block; /* Hace que los elementos sean en línea */
+      vertical-align: middle; /* Alinea verticalmente los elementos */
+    }
+
+    .header p {
+      margin-bottom: 0;
+      padding: 12px;
+    }
+
+    /*Container saldo*/
+    #info-container-saldo {
+      display: flex;
+    }
+
+    #info-container-saldo #info-container-historial {
+      flex: 1;
+      padding: 20px;
+      background-color: #fff;
+      box-sizing: border-box;
+    }
+
+    #info-container-saldo #saldo {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      background-color: #fff;
+      border-right: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+    #info-container-saldo p1 {
+      text-align: center;
+    }
+
+    #info-container-saldo p2 {
+      text-align: center;
+      font-size: 50px;
+    }
+
+    /*Container historial*/
+    #info-container-historial table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    #info-container-historial th,
+    #info-container-historial td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    #info-container-historial th {
+      background-color: #f2f2f2;
+    }
+
+    #info-container-historial button {
+      margin-top: 10px;
+    }
+
+    button {
+      background-color: #427d9d;
+      color: white;
+      border: none;
+      cursor: pointer;
+      height: 30px;
+      width: 120px;
+      float: right;
+    }
+
+    button:hover {
+      background-color: #9bbec8;
+    }
+  </style>
+  <body>
     
 
-</head>
-<body class="mbody">
-
-    <% if (usuario && monedero) {%>
     
-        <div id="saldo">
-            <h2>Saldo</h2>
-            <br>
-            <p><strong>Saldo Disponible:</strong> <%= monedero.saldo%></p>
-            <br><br>
-            <input id="inputmonto" type="number" placeholder="Ingrese monto (max. 4 dígitos)" maxlength="4" oninput="validarInput()"/>
-            <button onclick="recargarsaldo()">Recargar Saldo</button>
-            <br><br>
-            <h2>Historial</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Viaje</th>
-                        <th>Fecha</th>
-                        <th>Costo</th>
-                    </tr>
-                </thead>
-                <tbody>
+      <% if (usuario && monedero) {%>
+        <div class="header">
+            <img
+              src="https://th.bing.com/th/id/R.4f33e1da57a8d943a856eecc2bd344c0?rik=qcNwex%2fQDE8d9g&riu=http%3a%2f%2fpluspng.com%2fimg-png%2fbus-png-old-bus-png-image-40039-1744.png&ehk=eEZ8rXvcNjVUN6B98qUF%2fs6N5umMIhN6DUr8UcHX%2bIE%3d&risl=&pid=ImgRaw&r=0"
+              alt="Imagen de perfil"
+            />
+            <div class="header-right">
+              <a class="singOut">Cerrar sesion</a>
+            </div>
+            <div class="header-right"></div>
+            <p>Bienvenido usuario: <%=usuario.nombre  %></p>
+          </div>
+    
+          <div id="info-container-saldo">
+      <div id="saldo">
+        <h2>Saldo</h2>
+        <p1>Saldo Disponible</p1>
+        <p2><%= monedero.saldo%></p2>
+        <br /><br /><br /><input
+          id="inputmonto"
+          type="number"
+          placeholder="Ingrese monto (max. 4 dígitos)"
+          maxlength="4"
+          oninput="validarInput()"
+        />
+        <br /><button onclick="recargarsaldo()">Recargar Saldo</button>
+      </div>
 
-                    //F
-                    <% if (transaccion) { %>
-                        <% results.forEach((transaccion)=>{ %>
-                            <tr>
-                                <td><%= transaccion.viaje %></td>
-                                <td><%= transaccion.fecha instanceof Date ? transaccion.fechatoISOString().substring(0, 10) : '' %></td>
-                                
-                            </tr>
-            
-                        <% }) %>
-                    <% } %>
-                    
-                </tbody>
-            </table>
-            <button>Generar Reporte</button>
-        </div>
+      <div id="info-container-historial">
+        <h2>Historial</h2>
+        <br />
+        <table>
+          <thead>
+            <tr>
+              <th>Viaje</th>
+              <th>Fecha</th>
+              <th>Costo</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (transaccion) { %> <% results.forEach((transaccion)=>{ %>
+            <tr>
+              <td><%= transaccion.viaje %></td>
+              <td>
+                <%= transaccion.fecha instanceof Date ?
+                transaccion.fechatoISOString().substring(0, 10) : '' %>
+              </td>
+            </tr>
 
-    <% } %>
-    <script>
+            <% }) %> <% } %>
+          </tbody>
+        </table>
+        <br /><br /><button>Generar Reporte</button>
+      </div>
+
+      <% } %>
+      <script>
         function validarInput() {
-            var inputMonto = document.getElementById("inputmonto");
-            inputMonto.value = inputMonto.value.replace(/[^0-9]/g, ''); // Eliminar no números
-            if (inputMonto.value.length > 4) {
-                inputMonto.value = inputMonto.value.slice(0, 4); // Limitar a 5 dígitos
-            }
+          var inputMonto = document.getElementById("inputmonto");
+          inputMonto.value = inputMonto.value.replace(/[^0-9]/g, ""); // Eliminar no números
+          if (inputMonto.value.length > 4) {
+            inputMonto.value = inputMonto.value.slice(0, 4); // Limitar a 5 dígitos
+          }
         }
 
-        function recargarsaldo(){
-            
-        } 
-    </script>
-</body>
+        function recargarsaldo(monto){
+            var cedula = '<%=usuario.cedulaUsuario %>';
+            var monto = document.getElementById('inputmonto').value;
+            window.location = '/recargar/' + cedula+'/'+monto+'/'+'<%=usuario.ID%>';
+
+        }
+
+        
+        
+      </script>
+    </div>
+  </body>
 </html>
