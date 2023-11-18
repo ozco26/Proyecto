@@ -13,7 +13,7 @@ function contarSimilitudes(query, params) {
     });
   });
 }
-
+5;
 function traermonedero(usuario) {
   return new Promise((resolve, reject) => {
     const buscarmonedero = "SELECT * FROM monedero WHERE usuarioref = ?";
@@ -94,10 +94,8 @@ exports.saveReg = async (req, res) => {
 
     if (cedulacheck > 0) {
       console.log("Las cedulas similares fueron: " + cedulacheck);
-
     } else if (checkcorreo > 0) {
       console.log("Los correos similares fueron: " + checkcorreo);
-
     } else {
       conexion.query(
         "INSERT INTO usuario SET ?",
@@ -282,7 +280,6 @@ exports.loguearse = async (req, res) => {
   const buscarmonedero = "SELECT * FROM monedero WHERE usuarioref = ?";
   const obtenerHistorial = "SELECT * FROM transacciones WHERE idUsuario = ?";
 
-
   conexion.query(query, [correo, hash], (err, result) => {
     //hash
     if (err) {
@@ -291,37 +288,38 @@ exports.loguearse = async (req, res) => {
       try {
         console.log("Usuario encontrado:", result[0]);
         if (hash === result[0].contrasena) {
-
           //hash
           if (result[0].estadoUsuario === "A") {
-
             if (result[0].idRol === 1) {
-
               res.redirect("/MainAdmin");
-
             } else if (result[0].idRol === 2) {
-              conexion.query(buscarmonedero,[result[0].cedulaUsuario],(err, monedero) => {
-
+              conexion.query(
+                buscarmonedero,
+                [result[0].cedulaUsuario],
+                (err, monedero) => {
                   if (err) {
                     console.error(err);
                   } else {
                     console.log("Monedero encontrado: ", monedero[0]);
-                    conexion.query(obtenerHistorial,[result[0].cedulaUsuario],(err, historial) => {
+                    conexion.query(
+                      obtenerHistorial,
+                      [result[0].cedulaUsuario],
+                      (err, historial) => {
                         if (err) {
-
                           throw err;
-
                         } else {
-
                           console.log("Historial: " + historial[0]);
-                          res.render("UsuarioView", {usuario: result[0],monedero: monedero[0],transaccion: historial[0]});
-
+                          res.render("UsuarioView", {
+                            usuario: result[0],
+                            monedero: monedero[0],
+                            transaccion: historial[0],
+                          });
                         }
                       }
                     );
                   }
-              });
-
+                }
+              );
             } else if (result[0].idRol === 3) {
               res.redirect("/ChoferView");
             } else {
