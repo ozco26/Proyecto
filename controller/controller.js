@@ -94,10 +94,10 @@ exports.saveReg = async (req, res) => {
 
     if (cedulacheck > 0) {
       console.log("Las cedulas similares fueron: " + cedulacheck);
-      res.redirect("/AdministradorViewCreateUS");
+
     } else if (checkcorreo > 0) {
       console.log("Los correos similares fueron: " + checkcorreo);
-      res.redirect("/AdministradorViewCreateUS");
+
     } else {
       conexion.query(
         "INSERT INTO usuario SET ?",
@@ -228,6 +228,7 @@ exports.updateRuta = async (req, res) => {
   conexion.query(
     "UPDATE ruta SET ? WHERE idRuta = ?",
     [{ localidad: Localidad, indicaciones: Indicacion, costo: Costo }, IDRuta],
+
     (error, results) => {
       if (error) {
         console.log(error);
@@ -247,9 +248,6 @@ exports.updateUS = (req, res) => {
   const Contrasena = req.body.Contrasena;
   const rol = req.body.rol;
   const estado = req.body.estado;
-  const algoritmo = "sha256";
-  const hash = generarHash(algoritmo, Contrasena);
-
   conexion.query(
     "UPDATE usuario SET ? WHERE cedulaUsuario = ?",
     [
@@ -258,7 +256,7 @@ exports.updateUS = (req, res) => {
         apellidos: Apellidos,
         fechaNacimiento: FechaNacimiento,
         correo: Correo,
-        contrasena: hash,
+        contrasena: Contrasena,
         idRol: rol,
         estadoUsuario: estado,
       },
@@ -284,48 +282,46 @@ exports.loguearse = async (req, res) => {
   const buscarmonedero = "SELECT * FROM monedero WHERE usuarioref = ?";
   const obtenerHistorial = "SELECT * FROM transacciones WHERE idUsuario = ?";
 
-  conexion.query(query, [correo, contrasena], (err, result) => {
+
+  conexion.query(query, [correo, hash], (err, result) => {
     //hash
     if (err) {
       throw err;
     } else {
       try {
         console.log("Usuario encontrado:", result[0]);
-        if (contrasena === result[0].contrasena) {
+        if (hash === result[0].contrasena) {
+
           //hash
           if (result[0].estadoUsuario === "A") {
+
             if (result[0].idRol === 1) {
+
               res.redirect("/MainAdmin");
+
             } else if (result[0].idRol === 2) {
-              conexion.query(
-                buscarmonedero,
-                [result[0].cedulaUsuario],
-                (err, monedero) => {
+              conexion.query(buscarmonedero,[result[0].cedulaUsuario],(err, monedero) => {
+
                   if (err) {
                     console.error(err);
                   } else {
                     console.log("Monedero encontrado: ", monedero[0]);
-                    conexion.query(
-                      obtenerHistorial,
-                      [result[0].cedulaUsuario],
-                      (err, historial) => {
+                    conexion.query(obtenerHistorial,[result[0].cedulaUsuario],(err, historial) => {
                         if (err) {
+
                           throw err;
+
                         } else {
+
                           console.log("Historial: " + historial[0]);
-                          res.render("UsuarioView", {
-                            usuario: result[0],
-                            monedero: monedero[0],
-                            historial: historial[0],
-                            transaccion: historial[0],
-                          });
+                          res.render("UsuarioView", {usuario: result[0],monedero: monedero[0],transaccion: historial[0]});
+
                         }
                       }
                     );
                   }
-                }
-              );
-              res.redirect("/UsuarioView");
+              });
+
             } else if (result[0].idRol === 3) {
               res.redirect("/ChoferView");
             } else {
