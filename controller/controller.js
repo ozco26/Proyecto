@@ -37,7 +37,6 @@ function generarHash(algoritmo, datos) {
   return hash.digest("hex");
 }
 
-
 exports.comprobarcobrar = async (req,res) => {
 
   const buscarUsuarioMonedero = 'SELECT * FROM monedero WHERE usuarioref = ?';

@@ -309,7 +309,8 @@ router.get('/cobrar/:cedula/:monto/:id', (req,res)=>{
     conexion.query(usuario, [cedula], (err, infousuario) => {
 
         if (err) {
-            throw err
+            console.error('Error al ejecutar la consulta de usuario:', err);
+            return res.status(500).json({ error: 'Error interno del servidor' });
         } else {
             try {
                 if (infousuario.length > 0) {
@@ -317,39 +318,56 @@ router.get('/cobrar/:cedula/:monto/:id', (req,res)=>{
                     console.log("Usuario encontrado:", infousuario[0].nombre + " "+ infousuario[0].apellidos);
                     console.log("Monto a cobrar:", monto);
                     conexion.query(buscarmonedero, [infousuario[0].cedulaUsuario], (err, monedero) => {
-                        if (monedero[0].saldo >= monto) {
-                            // Realizar la actualización del saldo
-                            const nuevoSaldo = monedero[0].saldo - monto;
-                            const actualizarSaldo = "UPDATE monedero SET saldo = ? WHERE usuarioref = ?";
+                        if (err) {
+                            console.error('Error al ejecutar la consulta de monedero:', err);
+                            return res.status(500).json({ error: 'Error interno del servidor' });
+                        }
+                        if(infousuario[0].idRol===2){
 
-                            conexion.query(actualizarSaldo, [nuevoSaldo, infousuario[0].cedulaUsuario], (err, resultado) => {
-                                if (err) {
-                                    throw err;
-                                } else {
-                                    console.log("Saldo actualizado correctamente");
-                                    // Puedes realizar otras acciones o enviar una respuesta al cliente aquí
-                                }
-                            });
-                        } else {
-                            // El saldo no es suficiente
-                            console.log("Saldo insuficiente");
-                            // Puedes realizar otras acciones o enviar una respuesta al cliente aquí
+                        
+                            if (monedero[0].saldo >= monto) {
+                                // Realizar la actualización del saldo
+                                
+                                const nuevoSaldo = monedero[0].saldo - monto;
+                                const actualizarSaldo = "UPDATE monedero SET saldo = ? WHERE usuarioref = ?";
+
+                                conexion.query(actualizarSaldo, [nuevoSaldo, infousuario[0].cedulaUsuario], (err, resultado) => {
+                                    if (err) {
+                                        console.error('Error al actualizar el saldo:', err);
+                                        return res.status(500).json({ error: 'Error interno del servidor' });
+                                    } else {
+                                        res.status(200).json({ success: true });
+                                        console.log("Saldo actualizado correctamente");
+                                        // Puedes realizar otras acciones o enviar una respuesta al cliente aquí
+                                    }
+                                });
+                            } else {
+                                // El saldo no es suficiente
+                                console.log("Saldo insuficiente");
+                                // Puedes realizar otras acciones o enviar una respuesta al cliente aquí
+                                res.status(400).json({ error: 'Saldo insuficiente' });
+                            }
+                        
+                        }else{
+                            console.log("Usuario no es cliente");
+                                // Puedes realizar otras acciones o enviar una respuesta al cliente aquí
+                                res.status(400).json({ error: 'La cuenta registrada no se le puede cobrar' });
                         }
 
                     })
 
                 } else {
                     console.log("Usuario no encontrado");
-                    res.send("Usuario no encontrado en la base de datos");
+                    //res.send("Usuario no encontrado en la base de datos");
+                    res.status(404).json({ error: 'Usuario no encontrado en la base de datos' });
                     
                 }
             } catch (error) {
                 console.log(error)
+                res.status(500).json({ error: 'Error interno del servidor' });
             }
         }
     });
-    res.redirect('/Choferview/'+id)
-
 })
 
 //Cargar plantilla chofer segun ID

@@ -143,27 +143,63 @@
         ><br /><br />
         <!--button>Reporte</!--button-->
       </div>
+      <!--<div id="mensajeExito"></div>-->
     </main>
+
 
     <% } %>
     <script>
-      function comprobarcobrar(monto){
-        if(document.getElementById('inputCedula').value===""){
-          mensaje = "Por favor, digite un usuario"
-          mensajeError(mensaje)
-        }else{
-          var cedula = document.getElementById('inputCedula').value;
-          window.location = '/cobrar/' + cedula+'/'+monto+'/'+'<%=usuario.ID%>';
-        }
-      }
+      function comprobarcobrar(monto) {
+    var inputCedula = document.getElementById('inputCedula');
+    var cedula = document.getElementById('inputCedula').value;
+
+    if (cedula === "") {
+        mensajeError("Por favor, digite un numero de cédula");
+    } else {
+        // Realiza una solicitud al servidor usando fetch
+        fetch('/cobrar/' + cedula + '/' + monto + '/' + '<%=usuario.ID%>')
+            .then(response => response.json())
+            .then(data => {
+                // Verifica si hay un error en la respuesta
+                if (data.error) {
+                    // Muestra una alerta de error
+                    mensajeError(data.error);
+                } else if (data.success) {
+                    // Operación exitosa, muestra una alerta de éxito
+                    mensajeExito();
+                                        // Realiza la redirección después de mostrar la alerta de éxito
+                    
+                }
+            })
+            .catch(error => {
+                console.error('Error en la solicitud:', error);
+            });
+    }}
 
       function mensajeError(mensaje){
         Swal.fire({
           icon: 'error',
           title: 'Oops... ',
           text: mensaje,
+          showConfirmButton: false,
+          timer: 1500
         });
       }
+
+      function mensajeExito(){
+        Swal.fire({
+          
+          icon: "success",
+          title: "Cobro realizado",
+          showConfirmButton: false,
+          timer: 1500
+        });
+        document.getElementById('mensajeExito').innerHTML = "Cobro realizado correctamente";
+        window.location = '/cobrar/' + cedula + '/' + monto + '/' + '<%=usuario.ID%>';
+      }
+
+      
+      
     </script>
   </body>
 </html>
