@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>Prueba</title>
+    <title>Usuario</title>
   </head>
   <style>
     /*HEADER*/
@@ -114,6 +114,7 @@
       background-color: #9bbec8;
     }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <body>
     
 
@@ -178,6 +179,7 @@
         function validarInput() {
           var inputMonto = document.getElementById("inputmonto");
           inputMonto.value = inputMonto.value.replace(/[^0-9]/g, ""); // Eliminar no números
+          
           if (inputMonto.value.length > 4) {
             inputMonto.value = inputMonto.value.slice(0, 4); // Limitar a 5 dígitos
           }
@@ -186,7 +188,22 @@
         function recargarsaldo(monto){
             var cedula = '<%=usuario.cedulaUsuario %>';
             var monto = document.getElementById('inputmonto').value;
-            window.location = '/recargar/' + cedula+'/'+monto+'/'+'<%=usuario.ID%>';
+
+          
+            
+            if (monto>0) {
+         window.location = '/recargar/' + cedula+'/'+monto+'/'+'<%=usuario.ID%>';
+      } else {
+        // Utiliza SweetAlert en lugar de alert
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops... El valor debe ser mayor a cero ',
+          text: 'Por favor, introduzca un valor mayor',
+        });
+      }
+    
+          
+            
 
         }
 
