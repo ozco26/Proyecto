@@ -314,7 +314,7 @@ router.get('/cobrar/:cedula/:monto/:id', (req,res)=>{
             try {
                 if (infousuario.length > 0) {
                 
-                    console.log("Usuario encontrado:", infousuario[0]);
+                    console.log("Usuario encontrado:", infousuario[0].nombre + " "+ infousuario[0].apellidos);
                     console.log("Monto a cobrar:", monto);
                     conexion.query(buscarmonedero, [infousuario[0].cedulaUsuario], (err, monedero) => {
                         if (monedero[0].saldo >= monto) {

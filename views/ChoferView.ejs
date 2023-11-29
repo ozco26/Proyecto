@@ -105,51 +105,65 @@
     }
   </style>
   <body>
-    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <% if (usuario && monedero && rutausuario) { %>
-      <div class="header">
+    <div class="header">
+      <img
+        src="https://th.bing.com/th/id/R.4f33e1da57a8d943a856eecc2bd344c0?rik=qcNwex%2fQDE8d9g&riu=http%3a%2f%2fpluspng.com%2fimg-png%2fbus-png-old-bus-png-image-40039-1744.png&ehk=eEZ8rXvcNjVUN6B98qUF%2fs6N5umMIhN6DUr8UcHX%2bIE%3d&risl=&pid=ImgRaw&r=0"
+        alt="Imagen de perfil"
+      />
+      <div class="header-right">
+        <a href="/" class="singOut">Cerrar sesion</a>
+      </div>
+      <div class="header-right"></div>
+      <p>Bienvenido usuario: <%=usuario.nombre %></p>
+    </div>
+
+    <main>
+      <div id="info-container">
         <img
-          src="https://th.bing.com/th/id/R.4f33e1da57a8d943a856eecc2bd344c0?rik=qcNwex%2fQDE8d9g&riu=http%3a%2f%2fpluspng.com%2fimg-png%2fbus-png-old-bus-png-image-40039-1744.png&ehk=eEZ8rXvcNjVUN6B98qUF%2fs6N5umMIhN6DUr8UcHX%2bIE%3d&risl=&pid=ImgRaw&r=0"
+          src="https://th.bing.com/th/id/R.46c80054def2b30b66ba3aeed4f715c5?rik=E10b%2fJGQt6vddw&riu=http%3a%2f%2fcheapairportcar.com%2fimages%2fvec%2fdriver.png&ehk=NcFdhgcFH00%2bmStXl13%2bYoamALKyPgGGBFau8m%2bHtTg%3d&risl=&pid=ImgRaw&r=0"
           alt="Imagen de perfil"
         />
-        <div class="header-right">
-          <a href="/" class="singOut">Cerrar sesion</a>
-        </div>
-        <div class="header-right"></div>
-        <p>Bienvenido usuario: <%=usuario.nombre %></p>
+
+        <!-- Información del chofer -->
+        <h2>Información del chofer</h2>
+        <p>Nombre: <%=usuario.nombre %></p>
+        <p>Correo Electrónico: <%=usuario.correo%></p>
+        <p>Ruta: <%=rutausuario.localidad %></p>
+        <p>Costo: ₡<%=rutausuario.costo %></p>
       </div>
 
-      <main>
-        <div id="info-container">
-          <img
-            src="https://th.bing.com/th/id/R.46c80054def2b30b66ba3aeed4f715c5?rik=E10b%2fJGQt6vddw&riu=http%3a%2f%2fcheapairportcar.com%2fimages%2fvec%2fdriver.png&ehk=NcFdhgcFH00%2bmStXl13%2bYoamALKyPgGGBFau8m%2bHtTg%3d&risl=&pid=ImgRaw&r=0"
-            alt="Imagen de perfil"
-          />
-  
-          <!-- Información del chofer -->
-          <h2>Información del chofer</h2>
-          <p>Nombre: <%=usuario.nombre %></p>
-          <p>Correo Electrónico: <%=usuario.correo%></p>
-          <p>Ruta: <%=rutausuario.localidad  %></p>
-          <p>Costo: ₡<%=rutausuario.costo  %></p>
-        </div>
-  
-        <div id="button-container">
-          <!-- Botones de Pagar y Reportar -->
-          <input id="inputCedula" type="text" placeholder="Cedula" /><br />
-          <button onclick="comprobarcobrar('<%=rutausuario.costo %>')">Cobrar</button><br /><br />
-          <!--button>Reporte</!--button-->
-        </div>
-      </main>
+      <div id="button-container">
+        <!-- Botones de Pagar y Reportar -->
+        <input id="inputCedula" type="text" placeholder="Cedula" /><br />
+        <button onclick="comprobarcobrar('<%=rutausuario.costo %>')">
+          Cobrar</button
+        ><br /><br />
+        <!--button>Reporte</!--button-->
+      </div>
+    </main>
 
     <% } %>
     <script>
       function comprobarcobrar(monto){
-        var cedula = document.getElementById('inputCedula').value;
-        window.location = '/cobrar/' + cedula+'/'+monto+'/'+'<%=usuario.ID%>';
-
+        if(document.getElementById('inputCedula').value===""){
+          mensaje = "Por favor, digite un usuario"
+          mensajeError(mensaje)
+        }else{
+          var cedula = document.getElementById('inputCedula').value;
+          window.location = '/cobrar/' + cedula+'/'+monto+'/'+'<%=usuario.ID%>';
+        }
       }
 
+      function mensajeError(mensaje){
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops... ',
+          text: mensaje,
+        });
+      }
     </script>
   </body>
 </html>
