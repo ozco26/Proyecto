@@ -15,7 +15,6 @@ router.get('/', (req,res)=>{
 
 //Registro de usuario
 router.get('/Register', (req,res)=>{
-
     res.render('Register');
     
 });
@@ -82,9 +81,7 @@ router.get('/delete/:id', (req, res) => {
 });
 
 //Recargar saldo usuario
-
 router.get('/recargar/:cedula/:saldo', (req, res)=>{
-
     const cedula = req.params.cedula;
     const saldo = req.params.saldo;
     const updateQuery = 'UPDATE monedero SET saldo = saldo + ? WHERE usuarioref = ?';
@@ -99,7 +96,6 @@ router.get('/recargar/:cedula/:saldo', (req, res)=>{
 })
 
 //Ruta eliminar choferruta
-
 router.get('/delete2/:id', (req, res) => {
     const id = req.params.id;
     conexion.query('DELETE FROM ruta_usuario WHERE idRutaAsignada = ?',[id], (error, results)=>{
@@ -110,8 +106,8 @@ router.get('/delete2/:id', (req, res) => {
         }
     })
 });
-//Ruta eliminar ruta
 
+//Ruta eliminar ruta
 router.get('/delete3/:id', (req, res) => {
     const id = req.params.id;
     conexion.query('DELETE FROM ruta WHERE idRuta = ?',[id], (error, results)=>{
@@ -122,7 +118,6 @@ router.get('/delete3/:id', (req, res) => {
         }
     })
 });
-
 
 router.get('/AdministradorViewAsi', (req,res)=>{
     const consultarchofer=`
@@ -180,15 +175,11 @@ router.get('/AdministradorViewEditRuta/:id', (req,res)=>{
 });
 
 router.get('/AdministradorViewCreateUS', (req,res)=>{
-
-    res.render('AdministradorViewCreateUS');
-    
+    res.render('AdministradorViewCreateUS'); 
 });
 
 router.get('/AdministradorViewCreateRuta', (req,res)=>{
-
     res.render('AdministradorViewCreateRuta');
-    
 });
 
 router.get('/BloqueadoView', (req,res)=>{
@@ -196,6 +187,7 @@ router.get('/BloqueadoView', (req,res)=>{
     res.render('BloqueadoView');
     
 });
+
 router.get('/UsuarioView/:id', (req,res)=>{
     const id = req.params.id;
   console.log("Id encontrada: "+id);
@@ -240,8 +232,6 @@ router.get('/UsuarioView/:id', (req,res)=>{
 });
 
 //Recargar saldo
-
-
 router.get('/recargar/:cedula/:monto/:id', (req, res) => {
     const id = req.params.id;
     const cedula = req.params.cedula;
@@ -296,12 +286,12 @@ router.get('/recargar/:cedula/:monto/:id', (req, res) => {
     res.redirect('/UsuarioView/' + id);
 });
 
-
 //Comprobar cobrar
-router.get('/cobrar/:cedula/:monto/:id', (req,res)=>{
+router.get('/cobrar/:cedula/:monto/:id/:ruta', (req,res)=>{
     const id = req.params.id;
     const cedula = req.params.cedula;
     const monto = req.params.monto;
+    const ruta = req.params.ruta
 
     const usuario = "SELECT * FROM usuario WHERE cedulaUsuario=?" ;
     const buscarmonedero = "SELECT * FROM monedero WHERE usuarioref = ?";
@@ -331,7 +321,34 @@ router.get('/cobrar/:cedula/:monto/:id', (req,res)=>{
                                 const nuevoSaldo = monedero[0].saldo - monto;
                                 const actualizarSaldo = "UPDATE monedero SET saldo = ? WHERE usuarioref = ?";
 
+                                const id_Usuario = infousuario[0].ID;
+                                const id_monedero = monedero[0].ID;
+                                const fecha = new Date();
+                                const viaje = ruta;
+                                const costo = monto;
+
+
                                 conexion.query(actualizarSaldo, [nuevoSaldo, infousuario[0].cedulaUsuario], (err, resultado) => {
+                                    
+                                    conexion.query(
+                                        "INSERT INTO transacciones SET ?",
+                                        {
+                                            idUsuario: id_Usuario,
+                                            idMonedero : id_monedero,
+                                            fecha: fecha,
+                                            viaje: viaje,
+                                            costo: costo
+                                            
+                                        },
+                                        (err, results) => {
+                                          if (err) {
+                                            console.error('Error al actualizar el saldo:', err);
+                                            return res.status(500).json({ error: 'Error interno del servidor al guardar historial' });
+                                          }}
+                                        );
+
+
+
                                     if (err) {
                                         console.error('Error al actualizar el saldo:', err);
                                         return res.status(500).json({ error: 'Error interno del servidor' });
