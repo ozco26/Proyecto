@@ -207,28 +207,25 @@ router.get('/UsuarioView/:id', (req,res)=>{
                 if (err) {
                   console.error(err);
                 } else {
-                  console.log("Monedero encontrado: ", monedero[0]);
-                  conexion.query(obtenerHistorial,[infousuario[0].cedulaUsuario],(err, historial) => {
-                      if (err) {
-        
-                        throw err;
-        
-                      } else {
-        
-                        console.log("Historial: " + historial[0]);
-                        res.render("UsuarioView", {usuario: infousuario[0],monedero: monedero[0],transaccion: historial[0]});
-        
-                      }
-                    }
-                  );
-                }
-            });
+                    console.log("Monedero encontrado: ", monedero[0]);
+                    conexion.query(obtenerHistorial,[infousuario[0].ID],(err, historial) => {
+                        if (err) {
+                          console.log("Historial: " + historial[0]);
+                          console.log("Historial: " + historial);
+                          throw err;
+          
+                        } else {
+          
+                          console.log("Historial: " + historial[0]);
+                          res.render("UsuarioView", {usuario: infousuario[0],monedero: monedero[0], historial: historial});
+          
+                        }
+                    })
+                };
+            })
         }
-    })
+    });
 
-
-    
-    
 });
 
 //Recargar saldo

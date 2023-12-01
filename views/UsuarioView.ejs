@@ -153,25 +153,25 @@
         <table>
           <thead>
             <tr>
-              <th>Viaje</th>
-              <th>Fecha</th>
-              <th>Costo</th>
+              <td>viaje</td>
+              <td>Fecha</td>
+              <td>Costo</td>
             </tr>
           </thead>
           <tbody>
-            <% if (transaccion) { %> <% results.forEach((transaccion)=>{ %>
-            <tr>
-              <td><%= transaccion.viaje %></td>
-              <td>
-                <%= transaccion.fecha instanceof Date ?
-                transaccion.fechatoISOString().substring(0, 10) : '' %>
-              </td>
-            </tr>
+            
+            <% historial.forEach((transaccion) => { %>
+              <tr>
+                <td><%= transaccion.viaje %></td>
+                <td><%= transaccion.fecha instanceof Date ? transaccion.fecha.toISOString().substring(0, 10) : '' %></td>
+                <td><%= transaccion.costo %></td>
+              </tr>
+            <% }) %>
 
-            <% }) %> <% } %>
           </tbody>
         </table>
         <br /><br /><button>Generar Reporte</button>
+
       </div>
 
       <% } %>

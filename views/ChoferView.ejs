@@ -152,13 +152,13 @@
       function comprobarcobrar(monto) {
         var inputCedula = document.getElementById('inputCedula');
         var cedula = document.getElementById('inputCedula').value;
-        var ruta = rutausuario.localidad
+       
 
         if (cedula === "") {
             mensajeError("Por favor, digite un numero de cédula");
         } else {
             // Realiza una solicitud al servidor usando fetch
-            fetch('/cobrar/' + cedula + '/' + monto + '/' + '<%=usuario.ID%>'+'/'+ruta)
+            fetch('/cobrar/' + cedula + '/' + monto + '/' + '<%=usuario.ID%>'+'/'+'<%=rutausuario.localidad%>')
                 .then(response => response.json())
                 .then(data => {
                     // Verifica si hay un error en la respuesta

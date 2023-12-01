@@ -191,6 +191,84 @@ exports.saveRuta = async (req, res) => {
 };
 
 //Metodo para guardar Usuarios Creados
+//Metodo para guardar Usuarios Creados
+exports.saveUS = async (req, res) => {
+  const Cedula = req.body.Cedula;
+  const Nombre = req.body.Nombre;
+  const Apellidos = req.body.Apellidos;
+  const FechaNacimiento = req.body.FechaNacimiento;
+  const Correo = req.body.Correo;
+  const Contrasena = req.body.Contrasena;
+  const rol = req.body.rol;
+  const algoritmo = "sha256";
+  const hash = generarHash(algoritmo, Contrasena);
+
+  const check1 =
+    "SELECT COUNT(*) as count FROM usuario WHERE cedulaUsuario = ?";
+  const check2 = "SELECT COUNT(*) as count FROM usuario WHERE correo = ?";
+
+  try {
+    const cedulacheck = await contarSimilitudes(check1, [Cedula]);
+    const checkcorreo = await contarSimilitudes(check2, [Correo]);
+
+    if (cedulacheck > 0) {
+        console.log("Las cédulas similares fueron: " + cedulacheck);
+        res.redirect("/AdministradorViewCreateUS");
+    } else if (checkcorreo > 0) {
+        console.log("Los correos similares fueron: " + checkcorreo);
+        res.redirect("/AdministradorViewCreateUS");
+    } else {
+        // Primero, insertar en la tabla usuario
+        conexion.query(
+            "INSERT INTO usuario SET ?",
+            {
+                cedulaUsuario: Cedula,
+                nombre: Nombre,
+                apellidos: Apellidos,
+                fechaNacimiento: FechaNacimiento,
+                correo: Correo,
+                contrasena: hash,
+                idRol: rol,
+                estadoUsuario: "A",
+            },
+            (err, results) => {
+                if (err) {
+                  console.log("Error en insert de usuario:", err);
+                    res.redirect("/AdministradorViewCreateUS");
+                } else {
+                  console.log("Insert en usuario exitoso");
+                    // Luego, insertar en la tabla monedero
+                    conexion.query(
+                        "INSERT INTO monedero SET ?",
+                        {                           
+                          usuarioref: Cedula,
+                          saldo: 0,
+                        },
+                        (err, results) => {
+                            if (err) {
+                              console.log("Error en insert de monedero:", err);
+                                // Si hay un error, podrías considerar revertir la operación en la tabla usuario
+                                // y redirigir a una página de error.
+                                res.redirect("/AdministradorViewCreateUS");
+                            } else {
+                              console.log("Insert en monedero exitoso");
+                                res.redirect("/MainAdmin");
+                            }
+                        }
+                    );
+                }
+            }
+        );
+    }
+  } catch (err) {
+    console.log(err);
+    res.redirect("/AdministradorViewCreateUS");
+  }
+};
+
+
+/*
+
 exports.saveUS = async (req, res) => {
   const Cedula = req.body.Cedula;
   const Nombre = req.body.Nombre;
@@ -241,7 +319,7 @@ exports.saveUS = async (req, res) => {
   } catch (err) {
     console.log(err);
   }
-};
+};*/
 
 //Actualizar
 exports.updateRuta = async (req, res) => {
