@@ -125,7 +125,7 @@
               alt="Imagen de perfil"
             />
             <div class="header-right">
-              <a class="singOut">Cerrar sesion</a>
+              <a href="/" class="singOut">Cerrar sesion</a>
             </div>
             <div class="header-right"></div>
             <p>Bienvenido usuario: <%=usuario.nombre  %></p>
@@ -186,10 +186,26 @@
         function recargarsaldo(monto){
             var cedula = '<%=usuario.cedulaUsuario %>';
             var monto = document.getElementById('inputmonto').value;
-            window.location = '/recargar/' + cedula+'/'+monto+'/'+'<%=usuario.ID%>';
+            if (monto!='') {
+                
+                window.location = '/recargar/' + cedula+'/'+monto+'/'+'<%=usuario.ID%>';
+
+            }
 
         }
 
+        /*function disparadores(){
+
+            switch (key) {
+                case value:
+                    
+                    break;
+            
+                default:
+                    break;
+            }
+        }
+        */
         
         
       </script>

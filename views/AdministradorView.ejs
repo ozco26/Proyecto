@@ -1,199 +1,236 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" type="text/css" href="/AdministradorView.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+      integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css"
+    />
+
+    <title>Administrador View</title>
+  </head>
+  <body>
+    <div class="header">
+      <img
+        src="https://th.bing.com/th/id/R.4f33e1da57a8d943a856eecc2bd344c0?rik=qcNwex%2fQDE8d9g&riu=http%3a%2f%2fpluspng.com%2fimg-png%2fbus-png-old-bus-png-image-40039-1744.png&ehk=eEZ8rXvcNjVUN6B98qUF%2fs6N5umMIhN6DUr8UcHX%2bIE%3d&risl=&pid=ImgRaw&r=0"
+        alt="Imagen de perfil"
+      />
+      <div class="header-right">
+        <a href="/" Id="btn__desconectar" class="btn">Cerrar sesion</a>
+      </div>
+      <div class="header-right"></div>
+      <p>Bienvenido usuario: Albert</p>
+    </div>
     
-    <link rel="stylesheet" type="text/css" href="/AdministradorView.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+      <!--Tabla de usuarios-->
 
-    <title>Prueba</title>
-    
-</head>
-<body class="mbody">
-    <header class="cabezera">
-        <nav class="cabezera__elementos">
-            <h1 class="Elemento_Titulo">Pago Electronico - Administrador</h1>
-        </nav>
-            <a href="/" Id="btn__desconectar" class="btn">Cerrar sesion</a>
-    </header>
-    <main class="mmain">
-
-<!--Tabla de usuarios-->
-
-        <div class="container">
-            <br>
-        <br>
-            <h2>Tabla de usuarios</h2>
-            <a href="/AdministradorViewCreateUS" class="btn btn-outline-primary mt-4"><i class="fa-solid fa-plus"></i></a>
-            <div style="display: flex; justify-content: center">
-            <table id="tablausuario" class="table table-bordered table-striped text-center">
-                <thead>
-                    <tr class="bg-primary text-white">
-                        <th scope="col">ID</th>
-                        <th scope="col">CEDULA</th>
-                        <th scope="col">NOMBRE</th>
-                        <th scope="col">APELLIDO</th>
-                        <th scope="col">FECHA NACIMIENTO</th>
-                        <th scope="col">CORREO</th>
-                        <th scope="col">CONTRASEÑA</th>
-                        <th scope="col">ROL</th>
-                        <th scrope="col">ESTADO</th>
-                        <th scope="col">ACCION</th>
-                    </tr>
-                </thead>
-                <tbody>
-
-                    <% results.forEach((USUARIO)=>{ %>
-                        <tr>
-                            <td><%= USUARIO.ID %></td>
-                            <td><%= USUARIO.cedulaUsuario %></td>
-                            <td><%= USUARIO.nombre %></td>
-                            <td><%= USUARIO.apellidos %></td>
-                            <td><%= USUARIO.fechaNacimiento instanceof Date ? USUARIO.fechaNacimiento.toISOString().substring(0, 10) : '' %></td>
-                            <td><%= USUARIO.correo %></td>
-                            <td><%= USUARIO.contrasena %></td>
-                            <td><%= USUARIO.nombreRol %></td>
-                            <td><%= USUARIO.estadoUsuario %></td>
-                            <td>
-        
-                                <a href="/AdministradorViewEdit/<%=USUARIO.cedulaUsuario %>" class="btn btn-outline-info"><i class="fa-solid fa-pen-to-square"></i></a>
-                                <a  onclick="confirmar('<%= USUARIO.cedulaUsuario %>','1')" class="btn btn-outline-danger"><i class="fa-solid fa-trash" ></i></a>
-        
-                            </td>
-                        </tr>
-        
-                    <% }) %>
-                    
-                </tbody>
-            </table>
-        </div>
-        </div>
-
-<!--Tabla de Chofer - Ruta -->
-
-    <div class="container">
-        <br>
-        <br>
-        <h2>Tabla de Chofer y Ruta</h2>
-
-        <a href="/AdministradorViewAsi" class="btn btn-outline-primary mt-4"><i class="fa-solid fa-plus"></i></a>
-        <table id="tablachoferruta" class="table table-bordered table-striped text-center">
+      <div class="container">
+        <h2>Tabla de usuarios</h2>
+        <a
+          href="/AdministradorViewCreateUS"
+          class="btn btn-outline-primary mt-4"
+          ><i class="fa-solid fa-plus"></i
+        ></a><br>
+        <div style="display: flex; justify-content: center">
+          <table
+            id="tablausuario"
+            class="table table-bordered table-striped text-center"
+          >
             <thead>
-                <tr class="bg-primary text-white">
-                    <th scope="col">Chofer</th>
-                    <th scope="col">Ruta</th>
-                    <th scope="col">Acciones</th>
-                    
-
-                </tr>
+              <tr class="bg-primary text-white">
+                <th scope="col">ID</th>
+                <th scope="col">CEDULA</th>
+                <th scope="col">NOMBRE</th>
+                <th scope="col">APELLIDO</th>
+                <th scope="col">FECHA NACIMIENTO</th>
+                <th scope="col">CORREO</th>
+                <th scope="col">CONTRASEÑA</th>
+                <th scope="col">ROL</th>
+                <th scrope="col">ESTADO</th>
+                <th scope="col">ACCION</th>
+              </tr>
             </thead>
             <tbody>
+              <% results.forEach((USUARIO)=>{ %>
+              <tr>
+                <td><%= USUARIO.ID %></td>
+                <td><%= USUARIO.cedulaUsuario %></td>
+                <td><%= USUARIO.nombre %></td>
+                <td><%= USUARIO.apellidos %></td>
+                <td>
+                  <%= USUARIO.fechaNacimiento instanceof Date ?
+                  USUARIO.fechaNacimiento.toISOString().substring(0, 10) : '' %>
+                </td>
+                <td><%= USUARIO.correo %></td>
+                <td><%= USUARIO.contrasena %></td>
+                <td><%= USUARIO.nombreRol %></td>
+                <td><%= USUARIO.estadoUsuario %></td>
+                <td>
+                  <a
+                    href="/AdministradorViewEdit/<%=USUARIO.cedulaUsuario %>"
+                    class="btn btn-outline-info"
+                    ><i class="fa-solid fa-pen-to-square"></i
+                  ></a>
+                  <a
+                    onclick="confirmar('<%= USUARIO.cedulaUsuario %>','1')"
+                    class="btn btn-outline-danger"
+                    ><i class="fa-solid fa-trash"></i
+                  ></a>
+                </td>
+              </tr>
 
-                <% results3.forEach((choferRuta)=>{ %>
-                    <tr>
-                        <td><%= choferRuta.nombre %></td>
-                        <td><%= choferRuta.localidad %></td>
-                        
-                        <td>
-
-                            <a  onclick="confirmar('<%= choferRuta.idRutaAsignada %>','2')" class="btn btn-outline-danger"><i class="fa-solid fa-trash" ></i></a>
-
-                        </td>
-                    </tr>
-
-                <% }); %>
-                
+              <% }) %>
             </tbody>
-        </table>
-    </div>
-
-
-<!--Tabla de rutas-->
-        <div class="container">
-            <br>
-            <br>
-            <h2>Tabla rutas</h2>
-            <a href="/AdministradorViewCreateRuta" class="btn btn-outline-primary mt-4"><i class="fa-solid fa-plus"></i></a>
-            <table id="tablarutas" class="table table-bordered table-striped text-center">
-                <thead>
-                    <tr class="bg-primary text-white">
-                        <th scope="col">Id</th>
-                        <th scope="col">Localidad</th>
-                        <th scope="col">indicaciones</th>
-                        <th scope="col">Costo</th>
-                        <th scope="col">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-    
-                    <% results2.forEach((RUTA)=>{ %>
-                        <tr>
-                            <td><%= RUTA.idRuta %></td>
-                            <td><%= RUTA.localidad %></td>
-                            <td><%= RUTA.indicaciones %></td>
-                            <td><%= RUTA.costo %></td>
-                            <td>
-                                <a href="/AdministradorViewEditRuta/<%=RUTA.idRuta%>" class="btn btn-outline-info"><i class="fa-solid fa-pen-to-square"></i></a>
-                                <a  onclick="confirmar('<%=RUTA.idRuta%>', '3')" class="btn btn-outline-danger"><i class="fa-solid fa-trash" ></i></a>
-                            </td>
-                        </tr>
-        
-                    <% }) %>
-                    
-                </tbody>
-            </table>
+          </table>
         </div>
-        
+      </div>
+
+      <!--Tabla de Chofer - Ruta -->
+
+      <div class="container">
+        <h2>Tabla de Chofer y Ruta</h2>
+
+        <a href="/AdministradorViewAsi" class="btn btn-outline-primary mt-4"
+          ><i class="fa-solid fa-plus"></i
+        ></a><br>
+        <table
+          id="tablachoferruta"
+          class="table table-bordered table-striped text-center"
+        >
+          <thead>
+            <tr class="bg-primary text-white">
+              <th scope="col">Chofer</th>
+              <th scope="col">Ruta</th>
+              <th scope="col">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% results3.forEach((choferRuta)=>{ %>
+            <tr>
+              <td><%= choferRuta.nombre %></td>
+              <td><%= choferRuta.localidad %></td>
+
+              <td>
+                <a
+                  onclick="confirmar('<%= choferRuta.idRutaAsignada %>','2')"
+                  class="btn btn-outline-danger"
+                  ><i class="fa-solid fa-trash"></i
+                ></a>
+              </td>
+            </tr>
+
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+
+      <!--Tabla de rutas-->
+      <div class="container">
+        <h2>Tabla rutas</h2>
+        <a
+          href="/AdministradorViewCreateRuta"
+          class="btn btn-outline-primary mt-4"
+          ><i class="fa-solid fa-plus"></i
+        ></a><br>
+        <table
+          id="tablarutas"
+          class="table table-bordered table-striped text-center"
+        >
+          <thead>
+            <tr class="bg-primary text-white">
+              <th scope="col">Id</th>
+              <th scope="col">Localidad</th>
+              <th scope="col">indicaciones</th>
+              <th scope="col">Costo</th>
+              <th scope="col">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% results2.forEach((RUTA)=>{ %>
+            <tr>
+              <td><%= RUTA.idRuta %></td>
+              <td><%= RUTA.localidad %></td>
+              <td><%= RUTA.indicaciones %></td>
+              <td><%= RUTA.costo %></td>
+              <td>
+                <a
+                  href="/AdministradorViewEditRuta/<%=RUTA.idRuta%>"
+                  class="btn btn-outline-info"
+                  ><i class="fa-solid fa-pen-to-square"></i
+                ></a>
+                <a
+                  onclick="confirmar('<%=RUTA.idRuta%>', '3')"
+                  class="btn btn-outline-danger"
+                  ><i class="fa-solid fa-trash"></i
+                ></a>
+              </td>
+            </tr>
+
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
     </main>
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
-    
+
     <script>
-        $(document).ready(function () {
-            $('#tablausuario').DataTable();
-        });
-        $(document).ready(function () {
-            $('#tablarutas').DataTable();
-        });
-        $(document).ready(function () {
-            $('#tablachoferruta').DataTable();
-        });
+      $(document).ready(function () {
+        $("#tablausuario").DataTable();
+      });
+      $(document).ready(function () {
+        $("#tablarutas").DataTable();
+      });
+      $(document).ready(function () {
+        $("#tablachoferruta").DataTable();
+      });
 
-        function confirmar(id ,tabla) {
-            Swal.fire({
-                title: 'Esta seguro?',
-                text: "Eliminaras el registro permanentemente!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Si, eliminar!'
-            }).then((result) => {
-                if (result.isConfirmed) {
+      function confirmar(id, tabla) {
+        Swal.fire({
+          title: "Esta seguro?",
+          text: "Eliminaras el registro permanentemente!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Si, eliminar!",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            switch (tabla) {
+              case "1":
+                window.location = "/delete/" + id;
+                break;
+              case "2":
+                window.location = "/delete2/" + id;
+                break;
+              case "3":
+                window.location = "/delete3/" + id;
+                break;
 
-                    switch (tabla) {
-                        case '1':
-                            window.location = '/delete/' + id;
-                            break;
-                        case '2':
-                            window.location = '/delete2/' +id;
-                            break;
-                        case '3':
-                            window.location = '/delete3/' +id;
-                            break;
-                    
-                        default:
-                            break;
-                    }
-                    
-                }
-            })
-        }
+              default:
+                break;
+            }
+          }
+        });
+      }
     </script>
-</body>
+  </body>
 </html>
