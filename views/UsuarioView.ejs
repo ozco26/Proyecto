@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <title>Prueba</title>
   </head>
@@ -115,27 +116,24 @@
     }
   </style>
   <body>
-    
+    <% if (usuario) {%>
+    <div class="header">
+      <img
+        src="https://th.bing.com/th/id/R.4f33e1da57a8d943a856eecc2bd344c0?rik=qcNwex%2fQDE8d9g&riu=http%3a%2f%2fpluspng.com%2fimg-png%2fbus-png-old-bus-png-image-40039-1744.png&ehk=eEZ8rXvcNjVUN6B98qUF%2fs6N5umMIhN6DUr8UcHX%2bIE%3d&risl=&pid=ImgRaw&r=0"
+        alt="Imagen de perfil"
+      />
+      <div class="header-right">
+        <a href="/" class="singOut">Cerrar sesion</a>
+      </div>
+      <div class="header-right"></div>
+      <p>Bienvenido usuario: <%=usuario.nombre %></p>
+    </div>
 
-    
-      <% if (usuario && monedero) {%>
-        <div class="header">
-            <img
-              src="https://th.bing.com/th/id/R.4f33e1da57a8d943a856eecc2bd344c0?rik=qcNwex%2fQDE8d9g&riu=http%3a%2f%2fpluspng.com%2fimg-png%2fbus-png-old-bus-png-image-40039-1744.png&ehk=eEZ8rXvcNjVUN6B98qUF%2fs6N5umMIhN6DUr8UcHX%2bIE%3d&risl=&pid=ImgRaw&r=0"
-              alt="Imagen de perfil"
-            />
-            <div class="header-right">
-              <a href="/" class="singOut">Cerrar sesion</a>
-            </div>
-            <div class="header-right"></div>
-            <p>Bienvenido usuario: <%=usuario.nombre  %></p>
-          </div>
-    
-          <div id="info-container-saldo">
+    <div id="info-container-saldo">
       <div id="saldo">
         <h2>Saldo</h2>
         <p1>Saldo Disponible</p1>
-        <p2><%= monedero.saldo%></p2>
+        <p2><%= usuario.saldo%></p2>
         <br /><br /><br /><input
           id="inputmonto"
           type="number"
@@ -183,15 +181,21 @@
           }
         }
 
-        function recargarsaldo(monto){
-            var cedula = '<%=usuario.cedulaUsuario %>';
-            var monto = document.getElementById('inputmonto').value;
-            if (monto!='') {
-                
-                window.location = '/recargar/' + cedula+'/'+monto+'/'+'<%=usuario.ID%>';
+        function recargarsaldo(monto) {
+          var cedula = "<%=usuario.cedulaUsuario %>";
+          var monto = document.getElementById("inputmonto").value;
+          if (monto != "" || monto > 0) {
+            console.log("Pasa Recarga exitosa")
+            Swal.fire('Recarga exitosa')
+            window.location =
+              "/recargar/" + cedula + "/" + monto + "/" + "<%=usuario.ID%>";
 
-            }
+          } else {
+            console.log("Pasa Recarga no exitosa")
 
+            Swal.fire('Valor invalido, no se pudo recargar')
+
+          }
         }
 
         /*function disparadores(){
@@ -206,8 +210,6 @@
             }
         }
         */
-        
-        
       </script>
     </div>
   </body>
