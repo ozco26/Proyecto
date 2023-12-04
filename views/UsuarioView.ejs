@@ -119,7 +119,7 @@
     
 
     
-      <% if (usuario && monedero) {%>
+      <% if (usuario ) {%>
         <div class="header">
             <img
               src="https://th.bing.com/th/id/R.4f33e1da57a8d943a856eecc2bd344c0?rik=qcNwex%2fQDE8d9g&riu=http%3a%2f%2fpluspng.com%2fimg-png%2fbus-png-old-bus-png-image-40039-1744.png&ehk=eEZ8rXvcNjVUN6B98qUF%2fs6N5umMIhN6DUr8UcHX%2bIE%3d&risl=&pid=ImgRaw&r=0"
@@ -136,7 +136,7 @@
       <div id="saldo">
         <h2>Saldo</h2>
         <p1>Saldo Disponible</p1>
-        <p2><%= monedero.saldo%></p2>
+        <p2><%= usuario.saldo%></p2>
         <br /><br /><br /><input
           id="inputmonto"
           type="number"

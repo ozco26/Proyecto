@@ -20,7 +20,6 @@ router.get('/Register', (req,res)=>{
 });
 
 //Llena la tabla usuario\
-
 router.get('/MainAdmin', (req, res) => {
 
     const sql = `
@@ -84,7 +83,7 @@ router.get('/delete/:id', (req, res) => {
 router.get('/recargar/:cedula/:saldo', (req, res)=>{
     const cedula = req.params.cedula;
     const saldo = req.params.saldo;
-    const updateQuery = 'UPDATE monedero SET saldo = saldo + ? WHERE usuarioref = ?';
+    const updateQuery = 'UPDATE USUARIO SET saldo = saldo + ? WHERE usuarioref = ?';
 
     conexion.query(updateQuery,[{saldo},cedula], (error, saldo)=>{
         if(error){
@@ -192,7 +191,7 @@ router.get('/UsuarioView/:id', (req,res)=>{
     const id = req.params.id;
   console.log("Id encontrada: "+id);
   const usuario = "SELECT * FROM usuario WHERE ID=?" ;
-  const buscarmonedero = "SELECT * FROM monedero WHERE usuarioref = ?";
+ 
   const obtenerHistorial = "SELECT * FROM transacciones WHERE idUsuario = ?";
 
   conexion.query(usuario, [id], (err, infousuario) => {
@@ -201,13 +200,6 @@ router.get('/UsuarioView/:id', (req,res)=>{
             throw err;
 
         } else {
-
-            conexion.query(buscarmonedero,[infousuario[0].cedulaUsuario],(err, monedero) => {
-
-                if (err) {
-                  console.error(err);
-                } else {
-                    console.log("Monedero encontrado: ", monedero[0]);
                     conexion.query(obtenerHistorial,[infousuario[0].ID],(err, historial) => {
                         if (err) {
                           console.log("Historial: " + historial[0]);
@@ -217,13 +209,11 @@ router.get('/UsuarioView/:id', (req,res)=>{
                         } else {
           
                           console.log("Historial: " + historial[0]);
-                          res.render("UsuarioView", {usuario: infousuario[0],monedero: monedero[0], historial: historial});
+                          res.render("UsuarioView", {usuario: infousuario[0], historial: historial});
           
                         }
-                    })
-                };
-            })
-        }
+                    }) 
+         }
     });
 
 });
@@ -235,40 +225,19 @@ router.get('/recargar/:cedula/:monto/:id', (req, res) => {
     const monto = req.params.monto;
     var nuevoSaldo = 0;
     const usuarioQuery = "SELECT * FROM usuario WHERE cedulaUsuario=?";
-    const buscarMonederoQuery = "SELECT * FROM monedero WHERE usuarioref = ?";
-    const actualizarSaldoQuery = "UPDATE monedero SET saldo = ? WHERE usuarioref = ?";
-
-    conexion.query(usuarioQuery, [cedula], (err, infousuario) => {
+   const actualizarSaldoQuery = "UPDATE Usuario SET saldo = saldo + ? WHERE cedulaUsuario = ?";
+   conexion.query(usuarioQuery, [cedula], (err, infousuario) => {
         if (err) {
             throw err;
         } else {
             try {
                 if (infousuario.length > 0) {
                     console.log("Usuario encontrado:", infousuario[0]);
-
-                    conexion.query(buscarMonederoQuery, [infousuario[0].cedulaUsuario], (err, monedero) => {
+                    conexion.query(actualizarSaldoQuery, [monto, cedula], (err, resultado) => {
                         if (err) {
                             throw err;
                         } else {
-                            // Verificar si se encontró un monedero asociado al usuario
-                            if (monedero.length > 0) {
-                                // Realizar la actualización del saldo
-                                
-                                nuevoSaldo = monedero[0].saldo + parseInt(monto);
-
-                                conexion.query(actualizarSaldoQuery, [nuevoSaldo, infousuario[0].cedulaUsuario], (err, resultado) => {
-                                    if (err) {
-                                        throw err;
-                                    } else {
-                                        console.log("Saldo actualizado correctamente");
-                                        // Puedes realizar otras acciones o enviar una respuesta al cliente aquí
-                                    }
-                                });
-                            } else {
-                                // No se encontró un monedero asociado al usuario
-                                console.log("No se encontró un monedero asociado al usuario");
-                                // Puedes realizar otras acciones o enviar una respuesta al cliente aquí
-                            }
+                            console.log("Saldo actualizado correctamente");
                         }
                     });
                 } else {

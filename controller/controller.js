@@ -15,22 +15,6 @@ function contarSimilitudes(query, params) {
   });
 }
 
-function traermonedero(usuario) {
-  return new Promise((resolve, reject) => {
-    const buscarmonedero = "SELECT * FROM monedero WHERE usuarioref = ?";
-
-    conexion.query(buscarmonedero, [usuario], (err, monedero) => {
-      if (err) {
-        console.error(err);
-        reject(err);
-      } else {
-        console.log("Monedero encontrado:", monedero[0]);
-        resolve(monedero[0]);
-      }
-    });
-  });
-}
-
 function generarHash(algoritmo, datos) {
   const hash = crypto.createHash(algoritmo);
   hash.update(datos);
@@ -285,9 +269,6 @@ exports.saveUS = async (req, res) => {
     res.redirect("/AdministradorViewCreateUS");
   }
 };
-
-
-
 
 //Actualizar
 exports.updateRuta = async (req, res) => {
