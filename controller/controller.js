@@ -21,30 +21,6 @@ function generarHash(algoritmo, datos) {
   return hash.digest("hex");
 }
 
-exports.comprobarcobrar = async (req,res) => {
-
-  const buscarUsuarioMonedero = 'SELECT * FROM monedero WHERE usuarioref = ?';
-
-  conexion.query(buscarUsuarioMonedero, [usuario], (err, resultados) => {
-    if (err) {
-        throw err;
-    } else {
-      if (resultados.length > 0) {
-        const saldo = resultados[0].saldo;
-
-        if (saldo >= monto) {
-          
-        } else {
-          
-        }
-      } else {
-        
-      }
-    }
-  });
-
-};
-
 exports.saveRutaUsuario = async (req, res) => {
   const rutachoferID = req.body.Id;
   const localidad = req.body.localidad;
@@ -119,6 +95,7 @@ exports.saveReg = async (req, res) => {
           contrasena: hash,
           idRol: rol,
           estadoUsuario: "A",
+          saldo : 0,
         },
         (err, results) => {
           if (err) {
@@ -126,24 +103,7 @@ exports.saveReg = async (req, res) => {
               res.redirect("/AdministradorViewCreateUS");
           } else {
             console.log("Insert en usuario exitoso");
-              // insertar en la tabla monedero
-              conexion.query(
-                  "INSERT INTO monedero SET ?",
-                  {                           
-                    usuarioref: Cedula,
-                    saldo: 0,
-                  },
-                  (err, results) => {
-                      if (err) {
-                        console.log("Error en insert de monedero:", err);
-                        
-                          res.redirect("/AdministradorViewCreateUS");
-                      } else {
-                        console.log("Insert en monedero exitoso");
-                          res.redirect("/MainAdmin");
-                      }
-                  }
-              );
+            res.redirect("/MainAdmin");
           }
       }
   );
@@ -234,6 +194,7 @@ exports.saveUS = async (req, res) => {
                 contrasena: hash,
                 idRol: rol,
                 estadoUsuario: "A",
+                saldo : 0,
             },
             (err, results) => {
                 if (err) {
@@ -241,25 +202,9 @@ exports.saveUS = async (req, res) => {
                     res.redirect("/AdministradorViewCreateUS");
                 } else {
                   console.log("Insert en usuario exitoso");
-                    // Luego, insertar en la tabla monedero
-                    conexion.query(
-                        "INSERT INTO monedero SET ?",
-                        {                           
-                          usuarioref: Cedula,
-                          saldo: 0,
-                        },
-                        (err, results) => {
-                            if (err) {
-                              console.log("Error en insert de monedero:", err);
-                                // Si hay un error, podrías considerar revertir la operación en la tabla usuario
-                                // y redirigir a una página de error.
-                                res.redirect("/AdministradorViewCreateUS");
-                            } else {
-                              console.log("Insert en monedero exitoso");
+              
                                 res.redirect("/MainAdmin");
-                            }
-                        }
-                    );
+                           
                 }
             }
         );
@@ -331,7 +276,6 @@ exports.loguearse = async (req, res) => {
   const hash = generarHash(algoritmo, contrasena);
 
   const query = "SELECT * FROM usuario WHERE correo = ? AND contrasena = ?";
-  const buscarmonedero = "SELECT * FROM monedero WHERE usuarioref = ?";
   const obtenerHistorial = "SELECT * FROM transacciones WHERE idUsuario = ?";
   const rutaus = "SELECT r.* FROM ruta_usuario ru JOIN ruta r ON ru.idRuta = r.idRuta WHERE ru.cedulaUsuario = ? ;"
 
@@ -358,37 +302,7 @@ exports.loguearse = async (req, res) => {
 
             } else if (result[0].idRol === 3) {
               res.redirect('/ChoferView/'+result[0].ID);
-              /*
-              conexion.query(buscarmonedero,[result[0].cedulaUsuario],(err, monedero) => {
-
-                if (err) {
-                  console.error(err);
-                } else {
-                  console.log("Monedero encontrado: ", monedero[0]);
-                  conexion.query(obtenerHistorial,[result[0].cedulaUsuario],(err, historial) => {
-                      if (err) {
-
-                        throw err;
-
-                      } else {
-
-                        console.log("Historial: " + historial[0]);
-
-                        conexion.query(rutaus, [result[0].cedulaUsuario], (err, rutausuario)=>{
-
-                          if (err) {
-                            throw err;
-                          } else {
-                            console.log("Rutas y usuario: "+rutausuario[0]);
-                            res.render("ChoferView", {usuario: result[0],monedero: monedero[0],transaccion: historial[0], rutausuario:rutausuario[0]});
-
-                          }
-                        })
-                      }
-                  });
-                }
-            });
-            */
+              
             } else {
 
               console.log("Fallo en comprobacion");
