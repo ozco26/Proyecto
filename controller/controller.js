@@ -15,52 +15,11 @@ function contarSimilitudes(query, params) {
   });
 }
 
-function traermonedero(usuario) {
-  return new Promise((resolve, reject) => {
-    const buscarmonedero = "SELECT * FROM monedero WHERE usuarioref = ?";
-
-    conexion.query(buscarmonedero, [usuario], (err, monedero) => {
-      if (err) {
-        console.error(err);
-        reject(err);
-      } else {
-        console.log("Monedero encontrado:", monedero[0]);
-        resolve(monedero[0]);
-      }
-    });
-  });
-}
-
 function generarHash(algoritmo, datos) {
   const hash = crypto.createHash(algoritmo);
   hash.update(datos);
   return hash.digest("hex");
 }
-
-
-exports.comprobarcobrar = async (req,res) => {
-
-  const buscarUsuarioMonedero = 'SELECT * FROM monedero WHERE usuarioref = ?';
-
-  conexion.query(buscarUsuarioMonedero, [usuario], (err, resultados) => {
-    if (err) {
-        throw err;
-    } else {
-      if (resultados.length > 0) {
-        const saldo = resultados[0].saldo;
-
-        if (saldo >= monto) {
-          
-        } else {
-          
-        }
-      } else {
-        
-      }
-    }
-  });
-
-};
 
 exports.saveRutaUsuario = async (req, res) => {
   const rutachoferID = req.body.Id;
@@ -136,19 +95,23 @@ exports.saveReg = async (req, res) => {
           contrasena: hash,
           idRol: rol,
           estadoUsuario: "A",
+          saldo : 0,
         },
         (err, results) => {
           if (err) {
-            console.log(err);
+            console.log("Error en insert de usuario:", err);
+              res.redirect("/AdministradorViewCreateUS");
           } else {
-            res.redirect("/");
+            console.log("Insert en usuario exitoso");
+            res.redirect("/MainAdmin");
           }
-        }
-      );
-    }
-  } catch (err) {
-    console.log(err);
-  }
+      }
+  );
+}
+} catch (err) {
+console.log(err);
+res.redirect("/AdministradorViewCreateUS");
+}
 };
 
 exports.saveRuta = async (req, res) => {
@@ -191,6 +154,7 @@ exports.saveRuta = async (req, res) => {
   }
 };
 
+
 //Metodo para guardar Usuarios Creados
 exports.saveUS = async (req, res) => {
   const Cedula = req.body.Cedula;
@@ -212,35 +176,42 @@ exports.saveUS = async (req, res) => {
     const checkcorreo = await contarSimilitudes(check2, [Correo]);
 
     if (cedulacheck > 0) {
-      console.log("Las cedulas similares fueron: " + cedulacheck);
-      res.redirect("/AdministradorViewCreateUS");
+        console.log("Las cédulas similares fueron: " + cedulacheck);
+        res.redirect("/AdministradorViewCreateUS");
     } else if (checkcorreo > 0) {
-      console.log("Los correos similares fueron: " + checkcorreo);
-      res.redirect("/AdministradorViewCreateUS");
+        console.log("Los correos similares fueron: " + checkcorreo);
+        res.redirect("/AdministradorViewCreateUS");
     } else {
-      conexion.query(
-        "INSERT INTO usuario SET ?",
-        {
-          cedulaUsuario: Cedula,
-          nombre: Nombre,
-          apellidos: Apellidos,
-          fechaNacimiento: FechaNacimiento,
-          correo: Correo,
-          contrasena: hash,
-          idRol: rol,
-          estadoUsuario: "A",
-        },
-        (err, results) => {
-          if (err) {
-            console.log(err);
-          } else {
-            res.redirect("/MainAdmin");
-          }
-        }
-      );
+        // Primero, insertar en la tabla usuario
+        conexion.query(
+            "INSERT INTO usuario SET ?",
+            {
+                cedulaUsuario: Cedula,
+                nombre: Nombre,
+                apellidos: Apellidos,
+                fechaNacimiento: FechaNacimiento,
+                correo: Correo,
+                contrasena: hash,
+                idRol: rol,
+                estadoUsuario: "A",
+                saldo : 0,
+            },
+            (err, results) => {
+                if (err) {
+                  console.log("Error en insert de usuario:", err);
+                    res.redirect("/AdministradorViewCreateUS");
+                } else {
+                  console.log("Insert en usuario exitoso");
+              
+                                res.redirect("/MainAdmin");
+                           
+                }
+            }
+        );
     }
   } catch (err) {
     console.log(err);
+    res.redirect("/AdministradorViewCreateUS");
   }
 };
 
@@ -305,7 +276,6 @@ exports.loguearse = async (req, res) => {
   const hash = generarHash(algoritmo, contrasena);
 
   const query = "SELECT * FROM usuario WHERE correo = ? AND contrasena = ?";
-  const buscarmonedero = "SELECT * FROM monedero WHERE usuarioref = ?";
   const obtenerHistorial = "SELECT * FROM transacciones WHERE idUsuario = ?";
   const rutaus = "SELECT r.* FROM ruta_usuario ru JOIN ruta r ON ru.idRuta = r.idRuta WHERE ru.cedulaUsuario = ? ;"
 
@@ -332,37 +302,7 @@ exports.loguearse = async (req, res) => {
 
             } else if (result[0].idRol === 3) {
               res.redirect('/ChoferView/'+result[0].ID);
-              /*
-              conexion.query(buscarmonedero,[result[0].cedulaUsuario],(err, monedero) => {
-
-                if (err) {
-                  console.error(err);
-                } else {
-                  console.log("Monedero encontrado: ", monedero[0]);
-                  conexion.query(obtenerHistorial,[result[0].cedulaUsuario],(err, historial) => {
-                      if (err) {
-
-                        throw err;
-
-                      } else {
-
-                        console.log("Historial: " + historial[0]);
-
-                        conexion.query(rutaus, [result[0].cedulaUsuario], (err, rutausuario)=>{
-
-                          if (err) {
-                            throw err;
-                          } else {
-                            console.log("Rutas y usuario: "+rutausuario[0]);
-                            res.render("ChoferView", {usuario: result[0],monedero: monedero[0],transaccion: historial[0], rutausuario:rutausuario[0]});
-
-                          }
-                        })
-                      }
-                  });
-                }
-            });
-            */
+              
             } else {
 
               console.log("Fallo en comprobacion");
