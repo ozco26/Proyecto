@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
 
-    <title>Prueba</title>
+    <title>Administrador</title>
     
 </head>
 <body class="mbody">
@@ -124,6 +124,9 @@
                         <th scope="col">Localidad</th>
                         <th scope="col">indicaciones</th>
                         <th scope="col">Costo</th>
+                        <th scope="col">Provincia</th>
+                        <th scope="col">Cantón</th>
+                        <th scope="col">Código CTP </th>
                         <th scope="col">Acciones</th>
                     </tr>
                 </thead>
@@ -135,6 +138,9 @@
                             <td><%= RUTA.localidad %></td>
                             <td><%= RUTA.indicaciones %></td>
                             <td><%= RUTA.costo %></td>
+                            <td><%= RUTA.provincia %></td>
+                            <td><%= RUTA.canton %></td>
+                            <td><%= RUTA.ruta_CTP %></td>
                             <td>
                                 <a href="/AdministradorViewEditRuta/<%=RUTA.idRuta%>" class="btn btn-outline-info"><i class="fa-solid fa-pen-to-square"></i></a>
                                 <a  onclick="confirmar('<%=RUTA.idRuta%>', '3')" class="btn btn-outline-danger"><i class="fa-solid fa-trash" ></i></a>

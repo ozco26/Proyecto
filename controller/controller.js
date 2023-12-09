@@ -119,6 +119,9 @@ exports.saveRuta = async (req, res) => {
   const Localidad = req.body.Localidad;
   const Indicacion = req.body.Indicacion;
   const Costo = req.body.Costo;
+  const prov = req.body.provincia;
+  const cant = req.body.canton;
+  const ruta_ctp = req.body.ruta_CTP;
 
   const check = "SELECT COUNT(*) AS count FROM `ruta` WHERE idRuta = ?";
 
@@ -137,6 +140,9 @@ exports.saveRuta = async (req, res) => {
             localidad: Localidad,
             indicaciones: Indicacion,
             costo: Costo,
+            provincia : prov,
+            canton : cant,
+            ruta_CTP : ruta_ctp,
           },
           IDRuta,
         ],
@@ -221,10 +227,18 @@ exports.updateRuta = async (req, res) => {
   const Localidad = req.body.Localidad;
   const Indicacion = req.body.Indicacion;
   const Costo = req.body.Costo;
+  const prov = req.body.provincia;
+  const cant = req.body.canton;
+  const ruta_ctp = req.body.ruta_CTP;
 
   conexion.query(
     "UPDATE ruta SET ? WHERE idRuta = ?",
-    [{ localidad: Localidad, indicaciones: Indicacion, costo: Costo }, IDRuta],
+    [{ localidad: Localidad, 
+      indicaciones: Indicacion, 
+      costo: Costo,
+      provincia : prov,
+      canton : cant,
+      ruta_CTP : ruta_ctp, }, IDRuta],
 
     (error, results) => {
       if (error) {
