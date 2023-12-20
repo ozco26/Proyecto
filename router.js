@@ -292,6 +292,10 @@ router.get("/cobrar/:cedula/:monto/:id/:ruta", (req, res) => {
   const cedula = req.params.cedula;
   const monto = req.params.monto;
   const ruta = req.params.ruta;
+  const fecha = new Date();
+
+              const viaje = ruta;
+              const costo = monto;
 
   const usuario = "SELECT * FROM usuario WHERE cedulaUsuario=?";
 
@@ -333,8 +337,7 @@ router.get("/cobrar/:cedula/:monto/:id/:ruta", (req, res) => {
                         console.error("Error al actualizar el saldo:", err);
                         return res.status(500).json({error:"Error interno del servidor al guardar historial",});
                       }
-                    }
-                  );
+                    });
 
                 if (err) {
                     console.error("Error al actualizar el saldo:", err);
@@ -350,6 +353,20 @@ router.get("/cobrar/:cedula/:monto/:id/:ruta", (req, res) => {
               );
             } else {
               // El saldo no es suficiente
+              conexion.query("INSERT INTO transacciones SET ?",
+                {
+                  idUsuario: id,
+                  fecha: fecha,
+                  viaje: viaje,
+                  costo: 0,
+                  detalle: "Fallo: saldo no es suficiente en "+ruta,
+                },
+                (err, results) => {
+                  if (err) {
+                    console.error("Error al insert saldo no es suficiente:", err);
+                    return res.status(500).json({error:"Error interno del servidor al guardar historial",});
+                  }
+                  });
               console.log("Saldo insuficiente");
               // Puedes realizar otras acciones o enviar una respuesta al cliente aquí
               res.status(400).json({ error: "Saldo insuficiente" });
@@ -357,6 +374,20 @@ router.get("/cobrar/:cedula/:monto/:id/:ruta", (req, res) => {
           } else {
             console.log("Usuario no es cliente");
             // Puedes realizar otras acciones o enviar una respuesta al cliente aquí
+            conexion.query("INSERT INTO transacciones SET ?",
+            {
+              idUsuario: "",
+              fecha: fecha,
+              viaje: viaje,
+              costo: 0,
+              detalle: "Fallo: cliente no registrado en"+ruta,
+            },
+            (err, results) => {
+              if (err) {
+                console.error("Error al insert saldo no es suficiente:", err);
+                return res.status(500).json({error:"Error interno del servidor al guardar historial",});
+              }
+              });
             res
               .status(400)
               .json({ error: "La cuenta registrada no se le puede cobrar" });
@@ -364,6 +395,20 @@ router.get("/cobrar/:cedula/:monto/:id/:ruta", (req, res) => {
         } else {
           console.log("Usuario no encontrado");
           //res.send("Usuario no encontrado en la base de datos");
+          conexion.query("INSERT INTO transacciones SET ?",
+            {
+              idUsuario: "",
+              fecha: fecha,
+              viaje: viaje,
+              costo: 0,
+              detalle: "Fallo: cliente no registrado en"+ruta,
+            },
+            (err, results) => {
+              if (err) {
+                console.error("Error al insert saldo no es suficiente:", err);
+                return res.status(500).json({error:"Error interno del servidor al guardar historial",});
+              }
+              });
           res
             .status(404)
             .json({ error: "Usuario no encontrado en la base de datos" });
