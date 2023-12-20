@@ -153,13 +153,7 @@
         var inputCedula = document.getElementById('inputCedula');
         var cedula = document.getElementById('inputCedula').value;
         if (cedula!='') {
-          window.location = '/cobrar/' + cedula+'/'+monto+'/'+'<%=usuario.ID%>';
-        }
-        if (cedula === "") {
-            mensajeError("Por favor, digite un numero de cédula");
-        } else {
-            // Realiza una solicitud al servidor usando fetch
-            fetch('/cobrar/' + cedula + '/' + monto + '/' + '<%=usuario.ID%>'+'/'+'<%=rutausuario.localidad%>')
+          fetch('/cobrar/' + cedula + '/' + monto + '/' + '<%=usuario.ID%>'+'/'+'<%=rutausuario.localidad%>')
                 .then(response => response.json())
                 .then(data => {
                     // Verifica si hay un error en la respuesta
@@ -176,6 +170,9 @@
                 .catch(error => {
                     console.error('Error en la solicitud:', error);
                 });
+        }
+        if (cedula === "") {
+            mensajeError("Por favor, digite un numero de cédula");
         }}
 
       function mensajeError(mensaje){
@@ -196,10 +193,9 @@
           timer: 1500
         });
         document.getElementById('mensajeExito').innerHTML = "Cobro realizado correctamente";
-        window.location = '/cobrar/' + cedula + '/' + monto + '/' + '<%=usuario.ID%>'+'/'+ruta;
+        /*window.location = '/cobrar/' + cedula + '/' + monto + '/' + '<%=usuario.ID%>'+'/'+ruta;*/
       }
 
-      
       
     </script>
   </body>
