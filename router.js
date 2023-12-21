@@ -80,19 +80,7 @@ router.get('/delete/:id', (req, res) => {
 });
 
 //Recargar saldo usuario
-router.get('/recargar/:cedula/:saldo', (req, res)=>{
-    const cedula = req.params.cedula;
-    const saldo = req.params.saldo;
-    const updateQuery = 'UPDATE USUARIO SET saldo = saldo + ? WHERE usuarioref = ?';
 
-    conexion.query(updateQuery,[{saldo},cedula], (error, saldo)=>{
-        if(error){
-            console.log(error);
-        }else{           
-                    
-        }
-    });
-})
 
 //Ruta eliminar choferruta
 router.get('/delete2/:id', (req, res) => {
@@ -192,7 +180,7 @@ router.get('/UsuarioView/:id', (req,res)=>{
   console.log("Id encontrada: "+id);
   const usuario = "SELECT * FROM usuario WHERE ID=?" ;
  
-  const obtenerHistorial = "SELECT * FROM transacciones WHERE idUsuario = ?";
+  const obtenerHistorial = "SELECT * FROM transacciones WHERE idUsuario = ? ORDER BY fecha DESC LIMIT 5";
 
   conexion.query(usuario, [id], (err, infousuario) => {
         if (err) {
@@ -200,95 +188,71 @@ router.get('/UsuarioView/:id', (req,res)=>{
             throw err;
 
         } else {
+            conexion.query(obtenerHistorial,[id],(err, historial) => {
+              if (err) {
+  
+                throw err;
+  
+              } else {
+  
+                console.log("Historial: " + JSON.stringify(historial));
+                res.render("UsuarioView", {usuario: infousuario[0],transaccion: historial});
 
-            conexion.query(buscarmonedero,[infousuario[0].cedulaUsuario],(err, monedero) => {
-
-                if (err) {
-                  console.error(err);
-                } else {
-                  console.log("Monedero encontrado: ", monedero[0]);
-                  conexion.query(obtenerHistorial,[infousuario[0].cedulaUsuario],(err, historial) => {
-                      if (err) {
-        
-                        throw err;
-        
-                      } else {
-        
-                        console.log("Historial: " + historial[0]);
-                        res.render("UsuarioView", {usuario: infousuario[0],monedero: monedero[0],transaccion: historial[0]});
-        
-                      }
-                    }
-                  );
-                }
-            });
+              }
+            })
         }
-    })
+    });
 
 
     
     
 });
 
-//Recargar saldo
-router.get('/recargar/:cedula/:monto/:id', (req, res) => {
-    const id = req.params.id;
-    const cedula = req.params.cedula;
-    const monto = req.params.monto;
-    var nuevoSaldo = 0+monto;
-    const usuarioQuery = "SELECT * FROM usuario WHERE cedulaUsuario=?";
-    const buscarMonederoQuery = "SELECT * FROM monedero WHERE usuarioref = ?";
-    const actualizarSaldoQuery = "UPDATE monedero SET saldo = ? WHERE usuarioref = ?";
+/// Recargar saldo
+router.get('/recargar/:monto/:id', (req, res) => {
+  const id = req.params.id;
+  const monto = req.params.monto;
+  
+  // Obtener la fecha actual
+  const fecha = new Date();
 
-    conexion.query(usuarioQuery, [cedula], (err, infousuario) => {
-        if (err) {
-            throw err;
-        } else {
-            try {
-                if (infousuario.length > 0) {
-                    console.log("Usuario encontrado:", infousuario[0]);
+  const usuarioQuery = "UPDATE usuario SET saldo = saldo + ? WHERE ID = ?";
+  try {
+      conexion.query(usuarioQuery, [monto, id], (err, resultado) => {
+          if (err) {
+              throw err;
+          } else {
+              console.log("Saldo actualizado correctamente");
 
-                    conexion.query(buscarMonederoQuery, [infousuario[0].cedulaUsuario], (err, monedero) => {
-                        if (err) {
-                            throw err;
-                        } else {
-                            // Verificar si se encontró un monedero asociado al usuario
-                            if (monedero.length > 0) {
-                                // Realizar la actualización del saldo
-                                
-                                nuevoSaldo = monedero[0].saldo + parseInt(monto);
+              conexion.query("INSERT INTO transacciones SET ?",
+                  {
+                      idUsuario: id,
+                      fecha: fecha,
+                      viaje: 'RECARGA',
+                      costo: monto,
+                      detalle: "El usuario recargó: " + monto,
+                  },
+                  (err, results) => {
+                      if (err) {
+                          console.error("Error al agregar pago de cliente:", err);
+                          return res.status(500).json({ error: "Error interno del servidor al guardar historial", });
+                      }
+                  });
 
-                                conexion.query(actualizarSaldoQuery, [nuevoSaldo, infousuario[0].cedulaUsuario], (err, resultado) => {
-                                    if (err) {
-                                        throw err;
-                                    } else {
-                                        console.log("Saldo actualizado correctamente");
-                                        // Puedes realizar otras acciones o enviar una respuesta al cliente aquí
-                                    }
-                                });
-                            } else {
-                                // No se encontró un monedero asociado al usuario
-                                console.log("No se encontró un monedero asociado al usuario");
-                                // Puedes realizar otras acciones o enviar una respuesta al cliente aquí
-                            }
-                        }
-                    });
-                } else {
-                    console.log("Usuario no encontrado");
-                    res.send("Usuario no encontrado en la base de datos");
-                }
-            } catch (error) {
-                console.log(error);
-            }
-        }
-    });
-    res.redirect('/UsuarioView/' + id);
+              res.json({ success: true, data: resultado });
+          }
+      });
+  } catch (error) {
+      return res.status(500).json({ error: "Error interno del servidor" });
+  }
 });
 
 
 //Comprobar cobrar
 router.get("/cobrar/:cedula/:monto/:id/:ruta", (req, res) => {
+  //id del chofer
   const id = req.params.id;
+  //cedula del cliente
   const cedula = req.params.cedula;
   const monto = req.params.monto;
   const ruta = req.params.ruta;
@@ -317,24 +281,40 @@ router.get("/cobrar/:cedula/:monto/:id/:ruta", (req, res) => {
               const nuevoSaldo = infousuario[0].saldo - monto;
               const actualizarSaldo =
                 "UPDATE usuario SET saldo = ? WHERE cedulaUsuario = ?";
-
+              //id del cliente
               const id_Usuario = infousuario[0].ID;
               const fecha = new Date();
               const viaje = ruta;
               const costo = monto;
 
               conexion.query(actualizarSaldo,[nuevoSaldo, infousuario[0].cedulaUsuario],(err, resultado) => {
+                //Registro del pago del cliente del viaje
                   conexion.query("INSERT INTO transacciones SET ?",
                     {
                       idUsuario: id_Usuario,
                       fecha: fecha,
                       viaje: viaje,
                       costo: costo,
-                      detalle: "Cobro ruta: "+ruta,
+                      detalle: "Pagó ruta: "+ruta,
                     },
                     (err, results) => {
                       if (err) {
-                        console.error("Error al actualizar el saldo:", err);
+                        console.error("Error al agregar pago de cliente:", err);
+                        return res.status(500).json({error:"Error interno del servidor al guardar historial",});
+                      }
+                    });
+                //Registro del cobro del chofer del viaje
+                    conexion.query("INSERT INTO transacciones set ?",
+                    {
+                      idUsuario: id,
+                      fecha: fecha,
+                      viaje: viaje,
+                      costo: costo,
+                      detalle: "Cobró ruta: "+ruta,
+                    },
+                    (err, results) => {
+                      if (err) {
+                        console.error("Error al agregar pago de cliente:", err);
                         return res.status(500).json({error:"Error interno del servidor al guardar historial",});
                       }
                     });
@@ -355,11 +335,11 @@ router.get("/cobrar/:cedula/:monto/:id/:ruta", (req, res) => {
               // El saldo no es suficiente
               conexion.query("INSERT INTO transacciones SET ?",
                 {
-                  idUsuario: id,
+                  idUsuario: infousuario[0].ID,
                   fecha: fecha,
                   viaje: viaje,
                   costo: 0,
-                  detalle: "Fallo: saldo no es suficiente en "+ruta,
+                  detalle: "Saldo insuficiente en ruta: "+ruta,
                 },
                 (err, results) => {
                   if (err) {
@@ -420,6 +400,31 @@ router.get("/cobrar/:cedula/:monto/:id/:ruta", (req, res) => {
     }
   });
 });
+
+//Generar-reporte
+router.get('/generar-reporte/:fecha/:chofer', (req, res) => {
+  const fecha = req.params.fecha;
+  const chofer = req.params.chofer;
+  const transaccion = "SELECT * FROM transacciones WHERE idUsuario=? AND fecha=?";
+
+  try {
+    conexion.query(transaccion,[chofer, fecha],(err,reportar)=>{
+      if (err) {
+        throw err
+      } else {
+        console.log('Reportes encontrados:', JSON.stringify(reportar));
+        res.json({ success: true, data: reportar });
+      }
+
+    })
+
+  } catch (error) {
+    console.error("Error al generar reporte: ", error);
+    return res.status(500).json({error:"Error interno del servidor al generar reporte",});
+  }
+  
+});
+
 
 //Cargar plantilla chofer segun ID
 router.get("/ChoferView/:id", (req, res) => {

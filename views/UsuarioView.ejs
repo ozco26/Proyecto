@@ -1,201 +1,339 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <title>Usuario</title>
-  </head>
-  <style>
+</head>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<style>
     /*HEADER*/
     body {
-      margin: 0px;
+        margin: 0px;
     }
+
     .header {
-      background-color: #f1f1f1;
+        background-color: #f1f1f1;
     }
+
     .header img {
-      padding: 5px 0px 5px 15px;
-      height: 50px;
-      width: 120px;
-      margin: 0 auto; /* Centra la imagen horizontalmente */
-      margin-bottom: 1px; /* Añade espacio inferior a la imagen */
+        padding: 5px 0px 5px 15px;
+        height: 50px;
+        width: 120px;
+        margin: 0 auto;
+        /* Centra la imagen horizontalmente */
+        margin-bottom: 1px;
+        /* Añade espacio inferior a la imagen */
     }
 
     .header a {
-      float: left;
-      color: black;
-      padding: 12px;
-      line-height: 36px;
+        float: left;
+        color: black;
+        padding: 12px;
+        line-height: 36px;
     }
 
     .header a:hover {
-      background-color: #ddd;
-      color: black;
+        background-color: #ddd;
+        color: black;
     }
 
     .header-right {
-      float: right;
+        float: right;
     }
 
     .header img,
     .header p {
-      display: inline-block; /* Hace que los elementos sean en línea */
-      vertical-align: middle; /* Alinea verticalmente los elementos */
+        display: inline-block;
+        /* Hace que los elementos sean en línea */
+        vertical-align: middle;
+        /* Alinea verticalmente los elementos */
     }
 
     .header p {
-      margin-bottom: 0;
-      padding: 12px;
+        margin-bottom: 0;
+        padding: 12px;
     }
 
     /*Container saldo*/
     #info-container-saldo {
-      display: flex;
+        display: flex;
     }
 
     #info-container-saldo #info-container-historial {
-      flex: 1;
-      padding: 20px;
-      background-color: #fff;
-      box-sizing: border-box;
+        flex: 1;
+        padding: 20px;
+        background-color: #fff;
+        box-sizing: border-box;
     }
 
     #info-container-saldo #saldo {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      padding: 20px;
-      background-color: #fff;
-      border-right: 1px solid #ccc;
-      box-sizing: border-box;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
+        background-color: #fff;
+        border-right: 1px solid #ccc;
+        box-sizing: border-box;
     }
+
     #info-container-saldo p1 {
-      text-align: center;
+        text-align: center;
     }
 
     #info-container-saldo p2 {
-      text-align: center;
-      font-size: 50px;
+        text-align: center;
+        font-size: 50px;
     }
 
     /*Container historial*/
     #info-container-historial table {
-      width: 100%;
-      border-collapse: collapse;
+        width: 100%;
+        border-collapse: collapse;
     }
 
     #info-container-historial th,
     #info-container-historial td {
-      border: 1px solid #ddd;
-      padding: 8px;
-      text-align: left;
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
     }
 
     #info-container-historial th {
-      background-color: #f2f2f2;
+        background-color: #f2f2f2;
     }
 
     #info-container-historial button {
-      margin-top: 10px;
+        margin-top: 10px;
     }
 
     button {
-      background-color: #427d9d;
-      color: white;
-      border: none;
-      cursor: pointer;
-      height: 30px;
-      width: 120px;
-      float: right;
+        background-color: #427d9d;
+        color: white;
+        border: none;
+        cursor: pointer;
+        height: 30px;
+        width: 120px;
+        float: right;
     }
 
     button:hover {
-      background-color: #9bbec8;
+        background-color: #9bbec8;
     }
-  </style>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <body>
-    
+</style>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    
-      <% if (usuario ) {%>
+<body>
+
+
+
+    <% if (usuario ) {%>
         <div class="header">
-            <img
-              src="https://th.bing.com/th/id/R.4f33e1da57a8d943a856eecc2bd344c0?rik=qcNwex%2fQDE8d9g&riu=http%3a%2f%2fpluspng.com%2fimg-png%2fbus-png-old-bus-png-image-40039-1744.png&ehk=eEZ8rXvcNjVUN6B98qUF%2fs6N5umMIhN6DUr8UcHX%2bIE%3d&risl=&pid=ImgRaw&r=0"
-              alt="Imagen de perfil"
-            />
+            <img src="https://th.bing.com/th/id/R.4f33e1da57a8d943a856eecc2bd344c0?rik=qcNwex%2fQDE8d9g&riu=http%3a%2f%2fpluspng.com%2fimg-png%2fbus-png-old-bus-png-image-40039-1744.png&ehk=eEZ8rXvcNjVUN6B98qUF%2fs6N5umMIhN6DUr8UcHX%2bIE%3d&risl=&pid=ImgRaw&r=0"
+                alt="Imagen de perfil" />
             <div class="header-right">
-              <a class="singOut"  href="/">Cerrar sesion</a>
+                <a class="singOut" href="/">Cerrar sesion</a>
             </div>
             <div class="header-right"></div>
-            <p>Bienvenido usuario: <%=usuario.nombre  %></p>
-          </div>
-    
-          <div id="info-container-saldo">
-      <div id="saldo">
-        <h2>Saldo</h2>
-        <p1>Saldo Disponible</p1>
-        <p2><%= usuario.saldo%></p2>
-        <br /><br /><br /><input
-          id="inputmonto"
-          type="number"
-          placeholder="Ingrese monto (max. 4 dígitos)"
-          maxlength="4"
-          oninput="validarInput()"
-        />
-        <br /><button onclick="recargarsaldo()">Recargar Saldo</button>
-      </div>
+            <p>Bienvenido usuario: <%=usuario.nombre %>
+            </p>
+        </div>
 
-      <div id="info-container-historial">
-        <h2>Historial</h2>
-        <br />
-        <table>
-          <thead>
-            <tr>
-              <td>viaje</td>
-              <td>Fecha</td>
-              <td>Costo</td>
-            </tr>
-          </thead>
-          <tbody>
-            
-            <% historial.forEach((transaccion) => { %>
-              <tr>
-                <td><%= transaccion.viaje %></td>
-                <td><%= transaccion.fecha instanceof Date ? transaccion.fecha.toISOString().substring(0, 10) : '' %></td>
-                <td><%= transaccion.costo %></td>
-              </tr>
-            <% }) %>
+        <div id="info-container-saldo">
+            <div id="saldo">
+                <h2>Saldo</h2>
+                <p1>Saldo Disponible</p1>
+                <p2>
+                    <%= usuario.saldo%>
+                </p2>
+                <br /><br /><br /><input id="inputmonto" type="number" placeholder="Ingrese monto (max. 4 dígitos)"
+                    maxlength="4" oninput="validarInput()" />
+                <br /><button onclick="recargarsaldo()">Recargar Saldo</button>
+                <br /><br /><br />
+                <input type="text" id="datepicker" placeholder="Selecciona una fecha">
+                <br><button onclick="generarReporte('<%=usuario.ID%>')">Generar Reporte</button>
 
-          </tbody>
-        </table>
-        <br /><br /><button>Generar Reporte</button>
+            </div>
 
-      </div>
+            <div id="info-container-historial">
+                <h2>Historial</h2>
+                <br />
+                <table>
+                    <thead>
+                        <tr>
+                            <td></td>
+                            <td>Fecha</td>
+                            <td>Costo</td>
+                            <td>Detalle</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (transaccion) {%>
+                            <% transaccion.forEach((transaccion)=> { %>
+                                <tr>
+                                    <td>
+                                        <%= transaccion.viaje %>
+                                    </td>
+                                    <td>
+                                        <%= transaccion.fecha instanceof Date ?
+                                            transaccion.fecha.toISOString().substring(0, 10) : '' %>
+                                    </td>
+                                    <td>
+                                        <%= transaccion.costo %>
+                                    </td>
+                                    <td>
+                                        <%= transaccion.detalle %>
+                                    </td>
+                                </tr>
 
-      <% } %>
-      <script>
-        function validarInput() {
-          var inputMonto = document.getElementById("inputmonto");
-          inputMonto.value = inputMonto.value.replace(/[^0-9]/g, ""); // Eliminar no números
-          
-          if (inputMonto.value.length > 4) {
-            inputMonto.value = inputMonto.value.slice(0, 4); // Limitar a 5 dígitos
-          }
-        }
+                                <% }) %>
+                                    <%}%>
 
-        function recargarsaldo(monto){
-            var cedula = '<%=usuario.cedulaUsuario %>';
-            var monto = document.getElementById('inputmonto').value;
-            window.location = '/recargar/' + cedula+'/'+monto+'/'+'<%=usuario.ID%>';
+                    </tbody>
+                </table>
+                <br /><br /><button>Generar Reporte</button>
 
-        }
+            </div>
 
-        
-        
-      </script>
-    </div>
-  </body>
+            <% } %>
+
+                <script>
+                    $(function () {
+                        $("#datepicker").datepicker();
+                    });
+
+                    function generarReporte(usuario) {
+
+                        // Obtiene la fecha seleccionada por el usuario
+                        var fechaSeleccionada = $("#datepicker").val();
+                        var fechaFormateada = formatoFecha(fechaSeleccionada);
+                        var clienteSeleccionado = usuario;
+
+                        if (!fechaSeleccionada) {
+                            mensajeError("Por favor, selecciona una fecha.");
+                            return;
+                        }
+
+                        // Realiza la solicitud al servidor para generar el reporte con la fecha seleccionada
+                        fetch('/generar-reporte/' + fechaFormateada + '/' + clienteSeleccionado)
+                            .then(response => response.json())
+                            .then(data => {
+                                // Verifica si hay un error en la respuesta
+                                if (data.error) {
+                                    // Muestra una alerta de error
+                                    mensajeError(data.error);
+                                } else if (data.success) {
+                                    mensajeExito();
+                                    abrirNuevaPestanaConDatos(data);
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error en la solicitud:', error);
+                            });
+                    }
+                    function formatoFecha(fecha) {
+                        var partesFecha = fecha.split('/');
+                        // Asegúrate de que partesFecha tiene tres elementos (día, mes, año)
+                        return partesFecha[2] + '-' + partesFecha[0] + '-' + partesFecha[1];
+                    }
+
+                    function validarInput() {
+                        var inputMonto = document.getElementById("inputmonto");
+                        inputMonto.value = inputMonto.value.replace(/[^0-9]/g, ""); // Eliminar no números
+
+                        if (inputMonto.value.length > 4) {
+                            inputMonto.value = inputMonto.value.slice(0, 4); // Limitar a 5 dígitos
+                        }
+                    }
+
+                    function recargarsaldo() {
+                        var monto = document.getElementById('inputmonto').value;
+                        // Verifica si el monto es válido
+                        if (!monto || isNaN(monto) || monto <= 0) {
+                            mensajeError("Por favor, ingrese un monto válido.");
+                            return;
+                        }
+                        // Realiza la solicitud al servidor para recargar el saldo
+                        fetch('/recargar/' + monto + '/' + '<%=usuario.ID%>')
+                            .then(response => response.json())
+                            .then(data => {
+                                // Verifica si hay un error en la respuesta
+                                if (data.error) {
+                                    // Muestra una alerta de error
+                                    mensajeError(data.error);
+                                } else if (data.success) {
+                                    mensajeExito("Saldo actualizado, refrescar");
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error en la solicitud:', error);
+                            });
+                    }
+
+                    function abrirNuevaPestanaConDatos(data) {
+                        var nuevaPestana = window.open('', '_blank');
+                        nuevaPestana.document.write('<html><head><title>Informe</title></head><body>');
+                        nuevaPestana.document.write('<h1>Datos del informe</h1>');
+
+                        // Verifica si hay datos antes de procesar
+                        if (data && data.data && data.data.length > 0) {
+                            // Crea una tabla para mostrar los datos
+                            nuevaPestana.document.write('<table border="1">');
+
+                            // Crea la fila de encabezado con los nombres de las columnas
+                            nuevaPestana.document.write('<tr>');
+                            for (const key in data.data[0]) {
+                                nuevaPestana.document.write('<th>' + key + '</th>');
+                            }
+                            nuevaPestana.document.write('</tr>');
+
+                            // Itera sobre los datos y crea una fila por cada elemento
+                            data.data.forEach(item => {
+                                nuevaPestana.document.write('<tr>');
+                                for (const key in item) {
+                                    nuevaPestana.document.write('<td>' + item[key] + '</td>');
+                                }
+                                nuevaPestana.document.write('</tr>');
+                            });
+
+                            // Cierra la tabla
+                            nuevaPestana.document.write('</table>');
+                        } else {
+                            nuevaPestana.document.write('<p>No hay datos disponibles.</p>');
+                        }
+
+                        nuevaPestana.document.write('</body></html>');
+                        nuevaPestana.document.close();
+                    }
+
+
+                    function mensajeError(mensaje) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops... ',
+                            text: mensaje,
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    }
+
+                    function mensajeExito(mensaje) {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Realizado",
+                            text: mensaje,
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    }
+
+                </script>
+        </div>
+</body>
+
 </html>
