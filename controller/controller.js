@@ -160,7 +160,6 @@ exports.saveRuta = async (req, res) => {
   }
 };
 
-
 //Metodo para guardar Usuarios Creados
 exports.saveUS = async (req, res) => {
   const Cedula = req.body.Cedula;

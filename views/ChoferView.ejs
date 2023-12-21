@@ -1,205 +1,306 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Chofer</title>
-  </head>
-  <style>
-    body {
-      margin: 0px;
-    }
-    .header {
-      background-color: #f1f1f1;
-    }
-    .header img {
-      padding: 5px 0px 5px 15px;
-      height: 50px;
-      width: 120px;
-      margin: 0 auto; /* Centra la imagen horizontalmente */
-      margin-bottom: 1px; /* Añade espacio inferior a la imagen */
-    }
-    /* Style the header links */
-    .header a {
-      float: left;
-      color: black;
-      padding: 12px;
-      line-height: 36px;
-    }
-    /* Change the background color on mouse-over */
-    .header a:hover {
-      background-color: #ddd;
-      color: black;
-    }
 
-    /* Float the link section to the right */
-    .header-right {
-      float: right;
-    }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chofer</title>
+</head>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<style>
+  body {
+    margin: 0px;
+  }
 
-    /* Agrega este bloque de estilos al final de tu estilo actual */
+  .header {
+    background-color: #f1f1f1;
+  }
 
-    /* Estilo para el párrafo junto a la imagen */
-    .header img,
-    .header p {
-      display: inline-block; /* Hace que los elementos sean en línea */
-      vertical-align: middle; /* Alinea verticalmente los elementos */
-    }
+  .header img {
+    padding: 5px 0px 5px 15px;
+    height: 50px;
+    width: 120px;
+    margin: 0 auto;
+    /* Centra la imagen horizontalmente */
+    margin-bottom: 1px;
+    /* Añade espacio inferior a la imagen */
+  }
 
-    .header p {
-      margin-bottom: 0; /* Elimina el espacio inferior del párrafo */
-      padding: 12px;
-    }
+  /* Style the header links */
+  .header a {
+    float: left;
+    color: black;
+    padding: 12px;
+    line-height: 36px;
+  }
 
-    main {
-      display: flex;
-      padding: 20px;
-    }
+  /* Change the background color on mouse-over */
+  .header a:hover {
+    background-color: #ddd;
+    color: black;
+  }
 
-    #info-container {
-      flex: 1; /* El contenedor de información ocupará el 50% del ancho */
-      display: flex; /* Utiliza flexbox para alinear verticalmente los elementos internos */
-      flex-direction: column; /* Alinea los elementos verticalmente */
-      justify-content: center; /* Centra verticalmente los elementos */
-      align-items: center; /* Centra horizontalmente los elementos */
-      padding: 20px;
-      background-color: #fff;
-      border-right: 1px solid #ccc;
-      box-sizing: border-box;
-    }
+  /* Float the link section to the right */
+  .header-right {
+    float: right;
+  }
 
-    #button-container {
-      flex: 1; /* El contenedor de botones ocupará el 50% del ancho */
-      padding: 20px;
-      background-color: #fff;
-      box-sizing: border-box;
-    }
+  /* Agrega este bloque de estilos al final de tu estilo actual */
 
-    img {
-      max-width: 100%; /* Ajusta la imagen para que no exceda el ancho del contenedor */
-      height: 150px;
-      width: 150px;
-      display: block;
-      margin: 0 auto; /* Centra la imagen horizontalmente */
-      margin-bottom: 10px; /* Añade espacio inferior a la imagen */
-    }
+  /* Estilo para el párrafo junto a la imagen */
+  .header img,
+  .header p {
+    display: inline-block;
+    /* Hace que los elementos sean en línea */
+    vertical-align: middle;
+    /* Alinea verticalmente los elementos */
+  }
 
-    input,
-    button {
-      width: 80%;
-      padding: 10px;
-      margin-bottom: 10px;
-      box-sizing: border-box;
-    }
+  .header p {
+    margin-bottom: 0;
+    /* Elimina el espacio inferior del párrafo */
+    padding: 12px;
+  }
 
-    button {
-      background-color: #4caf50;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
+  main {
+    display: flex;
+    padding: 20px;
+  }
 
-    button:hover {
-      background-color: #45a049;
-    }
-  </style>
-  <body>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  #info-container {
+    flex: 1;
+    /* El contenedor de información ocupará el 50% del ancho */
+    display: flex;
+    /* Utiliza flexbox para alinear verticalmente los elementos internos */
+    flex-direction: column;
+    /* Alinea los elementos verticalmente */
+    justify-content: center;
+    /* Centra verticalmente los elementos */
+    align-items: center;
+    /* Centra horizontalmente los elementos */
+    padding: 20px;
+    background-color: #fff;
+    border-right: 1px solid #ccc;
+    box-sizing: border-box;
+  }
 
-    <% if (usuario && rutausuario) { %>
+  #button-container {
+    flex: 1;
+    /* El contenedor de botones ocupará el 50% del ancho */
+    padding: 20px;
+    background-color: #fff;
+    box-sizing: border-box;
+  }
+
+  img {
+    max-width: 100%;
+    /* Ajusta la imagen para que no exceda el ancho del contenedor */
+    height: 150px;
+    width: 150px;
+    display: block;
+    margin: 0 auto;
+    /* Centra la imagen horizontalmente */
+    margin-bottom: 10px;
+    /* Añade espacio inferior a la imagen */
+  }
+
+  input,
+  button {
+    width: 80%;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+  }
+
+  button {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background-color: #45a049;
+  }
+</style>
+
+<body>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <% if (usuario && rutausuario) { %>
     <div class="header">
       <img
         src="https://th.bing.com/th/id/R.4f33e1da57a8d943a856eecc2bd344c0?rik=qcNwex%2fQDE8d9g&riu=http%3a%2f%2fpluspng.com%2fimg-png%2fbus-png-old-bus-png-image-40039-1744.png&ehk=eEZ8rXvcNjVUN6B98qUF%2fs6N5umMIhN6DUr8UcHX%2bIE%3d&risl=&pid=ImgRaw&r=0"
-        alt="Imagen de perfil"
-      />
+        alt="Imagen de perfil" />
       <div class="header-right">
         <a href="/" class="singOut">Cerrar sesion</a>
       </div>
       <div class="header-right"></div>
-      <p>Bienvenido usuario: <%=usuario.nombre %></p>
+      <p>Bienvenido usuario: <%=usuario.nombre %>
+      </p>
     </div>
 
     <main>
       <div id="info-container">
         <img
           src="https://th.bing.com/th/id/R.46c80054def2b30b66ba3aeed4f715c5?rik=E10b%2fJGQt6vddw&riu=http%3a%2f%2fcheapairportcar.com%2fimages%2fvec%2fdriver.png&ehk=NcFdhgcFH00%2bmStXl13%2bYoamALKyPgGGBFau8m%2bHtTg%3d&risl=&pid=ImgRaw&r=0"
-          alt="Imagen de perfil"
-        />
+          alt="Imagen de perfil" />
 
         <!-- Información del chofer -->
         <h2>Información del chofer</h2>
-        <p>Nombre: <%=usuario.nombre %></p>
-        <p>Correo Electrónico: <%=usuario.correo%></p>
-        <p>Ruta: <%=rutausuario.localidad %></p>
-        <p>Costo: ₡<%=rutausuario.costo %></p>
+        <p>Nombre: <%=usuario.nombre %>
+        </p>
+        <p>Correo Electrónico: <%=usuario.correo%>
+        </p>
+        <p>Ruta: <%=rutausuario.localidad %>
+        </p>
+        <p>Costo: ₡<%=rutausuario.costo %>
+        </p>
       </div>
 
       <div id="button-container">
         <!-- Botones de Pagar y Reportar -->
         <input id="inputCedula" type="text" placeholder="Cedula" /><br />
         <button onclick="comprobarcobrar('<%=rutausuario.costo %>')">
-          Cobrar</button
-        ><br /><br />
+          Cobrar</button><br /><br />
         <!--button>Reporte</!--button-->
       </div>
       <!--<div id="mensajeExito"></div>-->
+      <div id="button-container">
+        <input type="text" id="datepicker" placeholder="Seleccionar fecha" />
+        <button onclick="generarReporte('<%=usuario.ID%>')">Generar Reporte</button>
+      </div>
     </main>
 
 
     <% } %>
-    <script>
-      function comprobarcobrar(monto) {
-        var inputCedula = document.getElementById('inputCedula');
-        var cedula = document.getElementById('inputCedula').value;
-       
+      <script>
+        // Inicializa el datepicker
+        $(function () {
+          $("#datepicker").datepicker();
+        });
 
-        if (cedula === "") {
+        function generarReporte(usuario) {
+
+          var fechaSeleccionada = $("#datepicker").val();
+          // Formatea la fecha al formato YYYY-MM-DD
+          var fechaFormateada = formatoFecha(fechaSeleccionada);
+          var choferSeleccionado = usuario;
+
+          if (!fechaSeleccionada) {
+            mensajeError("Por favor, selecciona una fecha.");
+            return;
+          }
+          // Realiza la solicitud al servidor con la fecha como parámetro
+          fetch('/generar-reporte/' + fechaFormateada + '/' + choferSeleccionado)
+            .then(response => response.json())
+            .then(data => {
+              // Procesa los datos recibidos del servidor
+              if (data.error) {
+                mensajeError(data.error);
+              } else {
+                mensajeExito();
+                abrirNuevaPestanaConDatos(data);
+              }
+            })
+            .catch(error => {
+              console.error('Error en la solicitud:', error);
+            });
+        }
+
+        // Función para formatear la fecha al formato YYYY-MM-DD
+        function formatoFecha(fecha) {
+          var partesFecha = fecha.split('/');
+          // Asegúrate de que partesFecha tiene tres elementos (día, mes, año)
+          return partesFecha[2] + '-' + partesFecha[0] + '-' + partesFecha[1];
+        }
+
+        function abrirNuevaPestanaConDatos(data) {
+          var nuevaPestana = window.open('', '_blank');
+          nuevaPestana.document.write('<html><head><title>Informe</title></head><body>');
+          nuevaPestana.document.write('<h1>Datos del informe</h1>');
+
+          // Verifica si hay datos antes de procesar
+          if (data && data.data && data.data.length > 0) {
+            // Crea una tabla para mostrar los datos
+            nuevaPestana.document.write('<table border="1">');
+
+            // Crea la fila de encabezado con los nombres de las columnas
+            nuevaPestana.document.write('<tr>');
+            for (const key in data.data[0]) {
+              nuevaPestana.document.write('<th>' + key + '</th>');
+            }
+            nuevaPestana.document.write('</tr>');
+
+            // Itera sobre los datos y crea una fila por cada elemento
+            data.data.forEach(item => {
+              nuevaPestana.document.write('<tr>');
+              for (const key in item) {
+                nuevaPestana.document.write('<td>' + item[key] + '</td>');
+              }
+              nuevaPestana.document.write('</tr>');
+            });
+
+            // Cierra la tabla
+            nuevaPestana.document.write('</table>');
+          } else {
+            nuevaPestana.document.write('<p>No hay datos disponibles.</p>');
+          }
+
+          nuevaPestana.document.write('</body></html>');
+          nuevaPestana.document.close();
+        }
+
+        function comprobarcobrar(monto) {
+          var inputCedula = document.getElementById('inputCedula');
+          var cedula = document.getElementById('inputCedula').value;
+          if (cedula != '') {
+            fetch('/cobrar/' + cedula + '/' + monto + '/' + '<%=usuario.ID%>' + '/' + '<%=rutausuario.localidad%>')
+              .then(response => response.json())
+              .then(data => {
+                // Verifica si hay un error en la respuesta
+                if (data.error) {
+                  // Muestra una alerta de error
+                  mensajeError(data.error);
+                } else if (data.success) {
+                  // Operación exitosa, muestra una alerta de éxito
+                  mensajeExito("Se cobró con exito");
+                }
+              })
+              .catch(error => {
+                console.error('Error en la solicitud:', error);
+              });
+          }
+          if (cedula === "") {
             mensajeError("Por favor, digite un numero de cédula");
-        } else {
-            // Realiza una solicitud al servidor usando fetch
-            fetch('/cobrar/' + cedula + '/' + monto + '/' + '<%=usuario.ID%>'+'/'+'<%=rutausuario.localidad%>')
-                .then(response => response.json())
-                .then(data => {
-                    // Verifica si hay un error en la respuesta
-                    if (data.error) {
-                        // Muestra una alerta de error
-                        mensajeError(data.error);
-                    } else if (data.success) {
-                        // Operación exitosa, muestra una alerta de éxito
-                        mensajeExito();
-                                            // Realiza la redirección después de mostrar la alerta de éxito
-                        
-                    }
-                })
-                .catch(error => {
-                    console.error('Error en la solicitud:', error);
-                });
-        }}
+          }
+        }
 
-      function mensajeError(mensaje){
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops... ',
-          text: mensaje,
-          showConfirmButton: false,
-          timer: 1500
-        });
-      }
+        function mensajeError(mensaje) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops... ',
+            text: mensaje,
+            showConfirmButton: false,
+            timer: 1500
+          });
+        }
 
-      function mensajeExito(){
-        Swal.fire({          
-          icon: "success",
-          title: "Cobro realizado",
-          showConfirmButton: false,
-          timer: 1500
-        });
-        document.getElementById('mensajeExito').innerHTML = "Cobro realizado correctamente";
-        window.location = '/cobrar/' + cedula + '/' + monto + '/' + '<%=usuario.ID%>'+'/'+ruta;
-      }
+        function mensajeExito(mensaje) {
+          Swal.fire({
+            icon: "success",
+            title: "Realizado",
+            text: mensaje,
+            showConfirmButton: false,
+            timer: 1500
+          });
+        }
 
-      
-      
-    </script>
-  </body>
+
+      </script>
+</body>
+
 </html>
