@@ -221,7 +221,7 @@ exports.saveUS = async (req, res) => {
   }
 };
 
-//Actualizar
+//Actualizar rutas
 exports.updateRuta = async (req, res) => {
   const IDRuta = req.body.Id;
   const Localidad = req.body.Localidad;
@@ -251,6 +251,7 @@ exports.updateRuta = async (req, res) => {
   );
 };
 
+//actuliza Usuario
 exports.updateUS = (req, res) => {
   const Cedula = req.body.Cedula;
   const Nombre = req.body.Nombre;
@@ -285,6 +286,7 @@ exports.updateUS = (req, res) => {
   );
 };
 
+// permite loguear e identifica el tipo de usuario
 exports.loguearse = async (req, res) => {
   const correo = req.body.correo;
   const contrasena = req.body.contrasena;
