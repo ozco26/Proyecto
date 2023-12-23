@@ -19,7 +19,7 @@ router.get('/Register', (req,res)=>{
     
 });
 
-//Llena la tabla usuario\
+//Llena la tabla usuario, ruta usuario y carga pagina de administrador
 router.get('/MainAdmin', (req, res) => {
 
     const sql = `
@@ -73,6 +73,7 @@ router.get('/delete/:id', (req, res) => {
     conexion.query('DELETE FROM usuario WHERE cedulaUsuario = ?',[id], (error, results)=>{
         if(error){
             console.log(error);
+            res.redirect('/MainAdmin'); 
         }else{           
             res.redirect('/MainAdmin');         
         }
@@ -88,6 +89,7 @@ router.get('/delete2/:id', (req, res) => {
     conexion.query('DELETE FROM ruta_usuario WHERE idRutaAsignada = ?',[id], (error, results)=>{
         if(error){
             console.log(error);
+            res.redirect('/MainAdmin');  
         }else{           
             res.redirect('/MainAdmin');         
         }
@@ -100,6 +102,7 @@ router.get('/delete3/:id', (req, res) => {
     conexion.query('DELETE FROM ruta WHERE idRuta = ?',[id], (error, results)=>{
         if(error){
             console.log(error);
+            res.redirect('/MainAdmin');  
         }else{           
             res.redirect('/MainAdmin');         
         }
@@ -125,6 +128,7 @@ router.get('/AdministradorViewAsi', (req,res)=>{
             conexion.query(consultarruta, (err,ruta)=>{
                 if (err) {
                     throw err;
+                    
                 } else {
                     res.render('AdministradorViewAsi',{chofer:chofer, ruta:ruta});
                 };
@@ -348,12 +352,10 @@ router.get("/cobrar/:cedula/:monto/:id/:ruta", (req, res) => {
                   }
                   });
               console.log("Saldo insuficiente");
-              // Puedes realizar otras acciones o enviar una respuesta al cliente aquí
               res.status(400).json({ error: "Saldo insuficiente" });
             }
           } else {
             console.log("Usuario no es cliente");
-            // Puedes realizar otras acciones o enviar una respuesta al cliente aquí
             conexion.query("INSERT INTO transacciones SET ?",
             {
               idUsuario: "",
