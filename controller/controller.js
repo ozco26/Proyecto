@@ -192,11 +192,15 @@ exports.saveUS = async (req, res) => {
 
     if (cedulacheck > 0) {
         console.log("Las cédulas similares fueron: " + cedulacheck);
-        res.redirect("/AdministradorViewCreateUS");
+        res.locals.popupMessage = "Cedula ya está registrada";
+        res.render("AdministradorViewCreateUS");
+        res.locals.mostrarMensaje = true;
     } else if (checkcorreo > 0) {
         console.log("Los correos similares fueron: " + checkcorreo);
-        res.redirect("/AdministradorViewCreateUS");
-    } else {
+        res.locals.popupMessage = "Correo ya está registrado";
+        res.render("AdministradorViewCreateUS");
+        res.locals.mostrarMensaje = true;
+          } else {
         // Primero, insertar en la tabla usuario
         conexion.query(
             "INSERT INTO usuario SET ?",

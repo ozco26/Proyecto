@@ -11,7 +11,8 @@
     <title>crud- create</title>
   </head>
   <body>  
-
+    <% var mostrarMensaje ; %>
+    <% var popupMessage %>
     <div class="container mt-4">
       <div class="card border-secundary">
     
@@ -59,6 +60,7 @@
             <a href="/MainAdmin" class="btn btn-secundary">Cancelar</a>
           </form>
         </div>
+        <div id="oculto" style{"<%= mostrarMensaje ? 'display: block;' : 'display: none;' %>"}></div>
 
   </body>
 
@@ -93,6 +95,18 @@
         return true;}
     }
     </script>
-  
+  <script>
+    // Utiliza el mensaje enviado desde el servidor para mostrar el SweetAlert
+    document.addEventListener('DOMContentLoaded', function() {
+        const mensaje = "<%= popupMessage %>";
+        if (mensaje) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: mensaje
+            });
+        }
+    });
+</script>
   
   </html>
