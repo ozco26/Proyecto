@@ -103,7 +103,7 @@ exports.saveReg = async (req, res) => {
               res.redirect("/AdministradorViewCreateUS");
           } else {
             console.log("Insert en usuario exitoso");
-            res.redirect("/MainAdmin");
+            res.redirect("/");
           }
       }
   );
