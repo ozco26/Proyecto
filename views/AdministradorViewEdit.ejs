@@ -19,7 +19,7 @@
 
 
                     <form id="formAdmEd" action="/updateUS" method="POST">
-                        <input id="Cedula" name="Cedula" value="<%= user.cedulaUsuario %>" hidden>
+                        <input id="Cedula" name="Cedula" value="<%= user.cedulaUsuario %>" hidden readonly>
 
                         <div class="mb-3">
                           <label for="Nombre" class="form-label">Nombre</label>
@@ -37,7 +37,7 @@
                         </div>
                         <div class="mb-3">
                           <label for="Correo" class="form-label">Correo</label>
-                          <input type="email" class="form-control" id="Correo" name="Correo" tabindex="2" value="<%= user.correo %>">
+                          <input type="email" class="form-control" id="Correo" name="Correo" tabindex="2" value="<%= user.correo %>" readonly>
                         </div>
                         <div class="mb-3">
                           <label for="Contrasena" class="form-label">Contraseña</label>
