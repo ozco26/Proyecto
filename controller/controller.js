@@ -20,7 +20,7 @@ function generarHash(algoritmo, datos) {
   hash.update(datos);
   return hash.digest("hex");
 }
-
+//Metodo para guardar Rutas Creadas
 exports.saveRutaUsuario = async (req, res) => {
   const rutachoferID = req.body.Id;
   const localidad = req.body.localidad;
@@ -57,7 +57,7 @@ exports.saveRutaUsuario = async (req, res) => {
   }
 };
 
-//Metodo para guardar Rutas Creadas
+//crea usuario autogestion
 exports.saveReg = async (req, res) => {
   const Cedula = req.body.Cedula;
   const Nombre = req.body.Nombre;
@@ -100,7 +100,7 @@ exports.saveReg = async (req, res) => {
         (err, results) => {
           if (err) {
             console.log("Error en insert de usuario:", err);
-              res.redirect("/AdministradorViewCreateUS");
+              res.redirect("/");
           } else {
             console.log("Insert en usuario exitoso");
             res.redirect("/");
@@ -114,6 +114,7 @@ res.redirect("/AdministradorViewCreateUS");
 }
 };
 
+//metodo para crear rutas 
 exports.saveRuta = async (req, res) => {
   const IDRuta = req.body.Id;
   const Localidad = req.body.Localidad;
@@ -160,7 +161,7 @@ exports.saveRuta = async (req, res) => {
   }
 };
 
-//Metodo para guardar Usuarios Creados
+//Metodo para guardar Usuarios Creados por administrador
 exports.saveUS = async (req, res) => {
   const Cedula = req.body.Cedula;
   const Nombre = req.body.Nombre;
@@ -242,6 +243,7 @@ exports.updateRuta = async (req, res) => {
     (error, results) => {
       if (error) {
         console.log(error);
+        res.redirect("/MainAdmin");
       } else {
         res.redirect("/MainAdmin");
       }
@@ -275,6 +277,7 @@ exports.updateUS = (req, res) => {
     (error, results) => {
       if (error) {
         console.log(error);
+        res.redirect("/MainAdmin");
       } else {
         res.redirect("/MainAdmin");
       }
