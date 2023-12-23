@@ -35,28 +35,15 @@
         <a href="/" Id="btn__desconectar" class="btn">Cerrar sesion</a>
       </div>
       <div class="header-right"></div>
-      <p>Bienvenido usuario: Albert</p>
+      
     </div>
     
       <!--Tabla de usuarios-->
 
-    <title>Administrador</title>
-    
-</head>
-<body class="mbody">
-    <header class="cabezera">
-        <nav class="cabezera__elementos">
-            <h1 class="Elemento_Titulo">Pago Electronico - Administrador</h1>
-        </nav>
-            <a href="/" Id="btn__desconectar" class="btn">Cerrar sesion</a>
-    </header>
-    <main class="mmain">
-
-<!--Tabla de usuarios-->
 
         <div class="container">
-            <br>
-        <br>
+
+
             <h2>Tabla de usuarios</h2>
             <a href="/AdministradorViewCreateUS" class="btn btn-outline-primary mt-4"><i class="fa-solid fa-plus"></i></a>
             <div style="display: flex; justify-content: center">
@@ -103,68 +90,12 @@
         </div>
         </div>
 
-<!--Tabla de Chofer - Ruta -->
 
-    <div class="container">
-        <br>
-        <br>
-        <h2>Tabla de Chofer y Ruta</h2>
-
-        <a href="/AdministradorViewAsi" class="btn btn-outline-primary mt-4"><i class="fa-solid fa-plus"></i></a>
-        <table id="tablachoferruta" class="table table-bordered table-striped text-center">
-            <thead>
-              <tr class="bg-primary text-white">
-                <th scope="col">ID</th>
-                <th scope="col">CEDULA</th>
-                <th scope="col">NOMBRE</th>
-                <th scope="col">APELLIDO</th>
-                <th scope="col">FECHA NACIMIENTO</th>
-                <th scope="col">CORREO</th>
-                <th scope="col">CONTRASEÑA</th>
-                <th scope="col">ROL</th>
-                <th scrope="col">ESTADO</th>
-                <th scope="col">ACCION</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% results.forEach((USUARIO)=>{ %>
-              <tr>
-                <td><%= USUARIO.ID %></td>
-                <td><%= USUARIO.cedulaUsuario %></td>
-                <td><%= USUARIO.nombre %></td>
-                <td><%= USUARIO.apellidos %></td>
-                <td>
-                  <%= USUARIO.fechaNacimiento instanceof Date ?
-                  USUARIO.fechaNacimiento.toISOString().substring(0, 10) : '' %>
-                </td>
-                <td><%= USUARIO.correo %></td>
-                <td><%= USUARIO.contrasena %></td>
-                <td><%= USUARIO.nombreRol %></td>
-                <td><%= USUARIO.estadoUsuario %></td>
-                <td>
-                  <a
-                    href="/AdministradorViewEdit/<%=USUARIO.cedulaUsuario %>"
-                    class="btn btn-outline-info"
-                    ><i class="fa-solid fa-pen-to-square"></i
-                  ></a>
-                  <a
-                    onclick="confirmar('<%= USUARIO.cedulaUsuario %>','1')"
-                    class="btn btn-outline-danger"
-                    ><i class="fa-solid fa-trash"></i
-                  ></a>
-                </td>
-              </tr>
-
-              <% }) %>
-            </tbody>
-        </table>
-    </div>
 
 
 <!--Tabla de rutas-->
         <div class="container">
-            <br>
-            <br>
+
             <h2>Tabla rutas</h2>
             <a href="/AdministradorViewCreateRuta" class="btn btn-outline-primary mt-4"><i class="fa-solid fa-plus"></i></a>
             <table id="tablarutas" class="table table-bordered table-striped text-center">
@@ -242,53 +173,9 @@
           </tbody>
         </table>
       </div>
+<br>
+      
 
-      <!--Tabla de rutas-->
-      <div class="container">
-        <h2>Tabla rutas</h2>
-        <a
-          href="/AdministradorViewCreateRuta"
-          class="btn btn-outline-primary mt-4"
-          ><i class="fa-solid fa-plus"></i
-        ></a><br>
-        <table
-          id="tablarutas"
-          class="table table-bordered table-striped text-center"
-        >
-          <thead>
-            <tr class="bg-primary text-white">
-              <th scope="col">Id</th>
-              <th scope="col">Localidad</th>
-              <th scope="col">indicaciones</th>
-              <th scope="col">Costo</th>
-              <th scope="col">Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% results2.forEach((RUTA)=>{ %>
-            <tr>
-              <td><%= RUTA.idRuta %></td>
-              <td><%= RUTA.localidad %></td>
-              <td><%= RUTA.indicaciones %></td>
-              <td><%= RUTA.costo %></td>
-              <td>
-                <a
-                  href="/AdministradorViewEditRuta/<%=RUTA.idRuta%>"
-                  class="btn btn-outline-info"
-                  ><i class="fa-solid fa-pen-to-square"></i
-                ></a>
-                <a
-                  onclick="confirmar('<%=RUTA.idRuta%>', '3')"
-                  class="btn btn-outline-danger"
-                  ><i class="fa-solid fa-trash"></i
-                ></a>
-              </td>
-            </tr>
-
-            <% }) %>
-          </tbody>
-        </table>
-      </div>
     </main>
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
