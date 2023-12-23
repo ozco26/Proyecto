@@ -79,9 +79,18 @@ exports.saveReg = async (req, res) => {
 
     if (cedulacheck > 0) {
       console.log("Las cedulas similares fueron: " + cedulacheck);
+      
+      res.locals.popupMessage = "Cedula ya está registrada";
+      res.render("Register");
+      res.locals.mostrarMensaje = true;
+      
 
     } else if (checkcorreo > 0) {
       console.log("Los correos similares fueron: " + checkcorreo);
+      
+      res.locals.popupMessage = "Correo ya está registrado";
+      res.render("Register");
+      res.locals.mostrarMensaje = true;
 
     } else {
       conexion.query(
@@ -110,7 +119,7 @@ exports.saveReg = async (req, res) => {
 }
 } catch (err) {
 console.log(err);
-res.redirect("/AdministradorViewCreateUS");
+res.redirect("/");
 }
 };
 

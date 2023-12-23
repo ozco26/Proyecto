@@ -9,6 +9,8 @@
     <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <body>
+  <% var mostrarMensaje ; %>
+  <% var popupMessage %>
     <div class="container mt-4">
         <div class="card border-secundary">
       
@@ -49,6 +51,9 @@
               <a href="/" class="btn btn-secundary">Cancelar</a>
             </form>
           </div>
+
+    <div id="oculto" style{"<%= mostrarMensaje ? 'display: block;' : 'display: none;' %>"}></div>
+
 </body>
 
 <script>
@@ -81,6 +86,19 @@
       } else {
       return true;}
   }
+  </script>
+    <script>
+      // Utiliza el mensaje enviado desde el servidor para mostrar el SweetAlert
+      document.addEventListener('DOMContentLoaded', function() {
+          const mensaje = "<%= popupMessage %>";
+          if (mensaje) {
+              Swal.fire({
+                  icon: 'error',
+                  title: 'Error',
+                  text: mensaje
+              });
+          }
+      });
   </script>
 
 </html>
